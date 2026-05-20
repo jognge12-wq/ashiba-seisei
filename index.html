@@ -1,0 +1,983 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>足場 是正 集計（モック）</title>
+<style>
+  /* ===== ms-hub Design Tokens ===== */
+  :root {
+    --font: system-ui, -apple-system, "Hiragino Sans", "Hiragino Kaku Gothic ProN", "Yu Gothic", "Meiryo", sans-serif;
+    --primary:   oklch(0.55 0.14 155);
+    --brand:        oklch(0.55 0.14 155);
+    --brand-ink:    oklch(0.35 0.11 155);
+    --brand-soft:   oklch(0.94 0.04 155);
+    --brand-softer: oklch(0.97 0.02 155);
+    --brand-line:   oklch(0.88 0.04 155);
+    --bg:      oklch(0.985 0.003 95);
+    --surface: #ffffff;
+    --surface2: oklch(0.97 0.005 95);
+    --sfc-light: oklch(0.99 0.003 95);
+    --border:  oklch(0.92 0.005 95);
+    --border2: oklch(0.88 0.006 95);
+    --text1:   oklch(0.22 0.01 95);
+    --text2:   oklch(0.38 0.01 95);
+    --text3:   oklch(0.55 0.008 95);
+    --ink:     oklch(0.22 0.01 95);
+    --line:    oklch(0.92 0.005 95);
+    --green:   oklch(0.52 0.16 155);
+    --amber:   oklch(0.78 0.12 85);
+    --amber-l: oklch(0.96 0.04 85);
+    --amber-ink: oklch(0.40 0.10 80);
+    --red:     oklch(0.58 0.18 25);
+    --red-l:   oklch(0.96 0.04 25);
+    --shadow-sm: 0 1px 2px rgba(15,25,20,0.04);
+    --shadow:    0 1px 3px rgba(15,25,20,0.05), 0 1px 2px rgba(15,25,20,0.04);
+    --shadow-lg: 0 4px 20px rgba(15,25,20,0.06), 0 1px 3px rgba(15,25,20,0.04);
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --primary:   oklch(0.68 0.18 155);
+      --brand:        oklch(0.68 0.18 155);
+      --brand-ink:    oklch(0.82 0.14 155);
+      --brand-soft:   oklch(0.30 0.05 155);
+      --brand-softer: oklch(0.25 0.03 155);
+      --brand-line:   oklch(0.35 0.05 155);
+      --bg:       oklch(0.18 0.005 95);
+      --surface:  oklch(0.22 0.006 95);
+      --surface2: oklch(0.26 0.007 95);
+      --sfc-light: oklch(0.28 0.007 95);
+      --border:   oklch(0.30 0.008 95);
+      --border2:  oklch(0.27 0.007 95);
+      --text1: oklch(0.95 0.005 95);
+      --text2: oklch(0.78 0.006 95);
+      --text3: oklch(0.60 0.008 95);
+      --ink:   oklch(0.95 0.005 95);
+      --line:  oklch(0.30 0.008 95);
+      --green:   oklch(0.68 0.18 155);
+      --amber:   oklch(0.85 0.12 85);
+      --amber-l: oklch(0.28 0.06 80);
+      --amber-ink: oklch(0.85 0.12 85);
+      --red:     oklch(0.70 0.15 25);
+      --red-l:   oklch(0.28 0.06 25);
+    }
+    body { color-scheme: dark; }
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body { height: 100%; }
+  body {
+    font-family: var(--font);
+    background: var(--bg);
+    color: var(--text1);
+    font-size: 14px;
+    -webkit-font-smoothing: antialiased;
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+  }
+  .num { font-variant-numeric: tabular-nums; }
+
+  /* ============ Header ============ */
+  header {
+    background: var(--surface);
+    border-bottom: 1px solid var(--border);
+    padding: 10px 16px;
+    display: flex; align-items: center; justify-content: space-between;
+    gap: 10px; position: sticky; top: 0; z-index: 100; flex-wrap: wrap;
+  }
+  .brand {
+    font-weight: 700; color: var(--ink); font-size: 15px;
+    letter-spacing: -0.01em;
+    padding-left: 10px; border-left: 3px solid var(--brand);
+    display: flex; align-items: baseline; gap: 8px;
+  }
+  .brand small {
+    font-size: 10px; font-weight: 600; color: #fff;
+    background: var(--amber); padding: 2px 7px; border-radius: 100px;
+    letter-spacing: 0.02em;
+  }
+  .header-right { display: flex; gap: 8px; align-items: center; flex-wrap: wrap; }
+
+  main { max-width: 920px; margin: 0 auto; padding: 14px 16px 80px; }
+
+  /* ============ Buttons ============ */
+  .btn {
+    padding: 8px 14px; border-radius: 10px; font-size: 13px; font-weight: 600;
+    cursor: pointer; font-family: inherit; border: none; line-height: 1.2;
+    white-space: nowrap; transition: opacity .12s, background .15s, transform .06s;
+  }
+  .btn:active:not(:disabled) { transform: scale(0.98); }
+  .btn:disabled { opacity: .4; cursor: not-allowed; }
+  .btn-primary { background: var(--brand); color: #fff; }
+  .btn-primary:hover:not(:disabled) { opacity: .92; }
+  .btn-secondary { background: var(--surface2); color: var(--ink); }
+  .btn-secondary:hover:not(:disabled) { background: var(--border); }
+  .btn-ghost { background: transparent; color: var(--text2); padding: 6px 8px; }
+  .btn-ghost:hover { color: var(--text1); }
+  .btn-del { background: transparent; color: var(--red); padding: 6px 10px; }
+  .btn-del:hover { background: var(--red-l); }
+  .btn-sm { padding: 6px 10px; font-size: 12px; }
+
+  /* ============ Seg tabs ============ */
+  .seg-tabs {
+    display: flex; gap: 6px; padding: 4px; background: var(--surface2);
+    border-radius: 12px; margin-bottom: 14px;
+  }
+  .seg-tab {
+    flex: 1; padding: 9px 8px; text-align: center;
+    font-size: 13px; font-weight: 600; color: var(--text2);
+    background: transparent; border: none; border-radius: 8px;
+    cursor: pointer; transition: all .15s; font-family: inherit;
+  }
+  .seg-tab:hover { color: var(--text1); }
+  .seg-tab.active {
+    background: var(--surface); color: var(--brand); box-shadow: var(--shadow-sm);
+  }
+
+  /* ============ Card ============ */
+  .card {
+    background: var(--surface); border: 1.5px solid var(--border);
+    border-radius: 14px; padding: 14px 16px; margin-bottom: 12px;
+  }
+  .card-head {
+    display: flex; align-items: center; gap: 8px;
+    padding: 2px 0 10px 10px; margin-bottom: 12px;
+    border-bottom: 1px solid var(--line); border-left: 3px solid var(--brand);
+  }
+  .card-title { font-size: 15px; font-weight: 700; color: var(--ink); flex: 1; letter-spacing: -0.01em; }
+  .hint { font-size: 12px; color: var(--text2); line-height: 1.6; margin-bottom: 10px; }
+
+  /* ============ Inputs ============ */
+  .field-label {
+    display: flex; align-items: center; gap: 6px;
+    font-size: 11px; font-weight: 600; color: var(--text2); margin-bottom: 4px;
+  }
+  .input {
+    width: 100%; border: none; background: var(--surface2);
+    border-radius: 9px; padding: 9px 11px; font-size: 14px;
+    color: var(--ink); font-family: inherit; transition: background .12s;
+  }
+  .input:focus { outline: none; background: var(--surface); box-shadow: inset 0 0 0 1px var(--border2); }
+  select.input { appearance: none; -webkit-appearance: none;
+    background-image: url("data:image/svg+xml,%3Csvg width='10' height='6' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M1 1l4 4 4-4' stroke='%23999' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");
+    background-repeat: no-repeat; background-position: right 11px center; padding-right: 28px;
+  }
+  .grid2 { display: grid; grid-template-columns: 1fr 1fr; gap: 8px 10px; }
+  .grid2 > * { min-width: 0; }
+  .grid2 .full { grid-column: 1 / -1; }
+
+  /* ============ Banner ============ */
+  .banner {
+    background: var(--amber-l); border: 1px solid oklch(0.88 0.10 85);
+    border-radius: 12px; padding: 10px 14px; margin-bottom: 14px;
+    font-size: 12px; color: var(--amber-ink); line-height: 1.7;
+    display: flex; gap: 10px; align-items: flex-start;
+  }
+  .banner b { font-weight: 700; }
+  .banner .x { margin-left: auto; cursor: pointer; font-size: 16px; line-height: 1; padding: 0 4px; flex-shrink: 0; }
+
+  /* ============ Setup actions ============ */
+  .setup-actions { display: flex; gap: 8px; margin-top: 12px; flex-wrap: wrap; }
+  .file-btn { display: inline-flex; align-items: center; }
+
+  /* ============ Record list ============ */
+  .list-head {
+    display: flex; align-items: center; gap: 8px;
+    margin: 4px 2px 8px; font-size: 12px; font-weight: 700; color: var(--text2);
+  }
+  .list-count {
+    font-size: 11px; font-weight: 700; color: #fff; background: var(--text3);
+    border-radius: 100px; padding: 1px 8px;
+  }
+  .rec {
+    background: var(--surface); border: 1.5px solid var(--border);
+    border-radius: 14px; margin-bottom: 10px; overflow: hidden;
+  }
+  .rec-row { display: flex; gap: 12px; padding: 12px; }
+  .rec-thumb {
+    width: 104px; height: 104px; border-radius: 11px; flex-shrink: 0;
+    background: var(--surface2); overflow: hidden;
+  }
+  .rec-thumb img { width: 100%; height: 100%; object-fit: cover; display: block; }
+  .rec-body { flex: 1; min-width: 0; }
+  .rec-item-row { margin-bottom: 8px; }
+  .rec-foot {
+    display: flex; justify-content: flex-end; margin-top: 10px;
+    padding-top: 10px; border-top: 1px solid var(--line);
+  }
+  .pill {
+    font-size: 10px; font-weight: 700; padding: 2px 9px; border-radius: 100px;
+    white-space: nowrap;
+  }
+  .pill-ai { background: var(--brand-soft); color: var(--brand-ink); }
+
+  .empty {
+    padding: 44px 20px; text-align: center; color: var(--text3);
+    line-height: 1.9; font-size: 13px;
+    border: 1.5px dashed var(--border2); border-radius: 14px;
+  }
+
+  /* ============ 集計：サマリー ============ */
+  .summary { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; margin-bottom: 14px; }
+  .sm-card {
+    background: var(--surface); border: 1.5px solid var(--border);
+    border-radius: 12px; padding: 12px 10px; text-align: center;
+  }
+  .sm-num { font-size: 26px; font-weight: 700; line-height: 1; color: var(--brand); }
+  .sm-card.ink .sm-num { color: var(--ink); }
+  .sm-label { font-size: 11px; color: var(--text2); margin-top: 6px; }
+
+  /* ============ グラフ：横棒 ============ */
+  .bar-row {
+    display: flex; align-items: center; gap: 10px;
+    padding: 9px 14px; border-top: 1px solid var(--border);
+  }
+  .bar-row:first-child { border-top: none; }
+  .bar-name { font-size: 12px; color: var(--text1); width: 168px; flex-shrink: 0; }
+  .bar-track { display: block; flex: 1; height: 18px; background: var(--surface2); border-radius: 100px; overflow: hidden; }
+  .bar-fill { display: block; height: 100%; background: var(--brand); border-radius: 100px; min-width: 3px; }
+  .bar-cnt { font-size: 13px; font-weight: 700; width: 40px; text-align: right; flex-shrink: 0; }
+
+  /* ============ グラフ：縦棒 ============ */
+  .vbar-wrap { display: flex; gap: 6px; padding: 14px 14px 0; align-items: flex-end; }
+  .vbar-col { flex: 1; min-width: 0; }
+  .vbar-plot { height: 172px; display: flex; flex-direction: column; justify-content: flex-end; align-items: center; }
+  .vbar-cnt { font-size: 12px; font-weight: 700; margin-bottom: 3px; }
+  .vbar-bar { width: 100%; max-width: 46px; border-radius: 6px 6px 0 0; }
+  .vbar-name { font-size: 10px; color: var(--text2); text-align: center; padding: 7px 2px 12px; line-height: 1.3; word-break: break-word; }
+
+  /* ============ グラフ：円 ============ */
+  .pie-wrap { display: flex; gap: 18px; align-items: center; padding: 14px; flex-wrap: wrap; }
+  .pie-svg { width: 168px; height: 168px; flex-shrink: 0; }
+  .pie-legend { flex: 1; min-width: 220px; display: flex; flex-direction: column; gap: 7px; }
+  .lg-row { display: flex; align-items: center; gap: 8px; font-size: 12px; }
+  .lg-dot { width: 11px; height: 11px; border-radius: 3px; flex-shrink: 0; }
+  .lg-name { flex: 1; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .lg-val { color: var(--text2); flex-shrink: 0; }
+
+  /* ============ グラフ：表 ============ */
+  .agg-table { width: 100%; border-collapse: collapse; font-size: 13px; }
+  .agg-table th {
+    font-size: 11px; color: var(--text2); font-weight: 600; text-align: left;
+    padding: 8px 12px; border-bottom: 1px solid var(--border);
+  }
+  .agg-table td { padding: 8px 12px; border-top: 1px solid var(--border); }
+  .agg-table .ta-r { text-align: right; }
+  .agg-table tfoot td { font-weight: 700; border-top: 1.5px solid var(--border2); }
+  .chart-empty { padding: 26px 14px; color: var(--text3); font-size: 13px; text-align: center; }
+
+  /* ============ master ============ */
+  .m-row {
+    display: flex; align-items: center; gap: 8px;
+    padding: 9px 12px; border-top: 1px solid var(--border);
+  }
+  .m-row:first-of-type { border-top: none; }
+  .m-name { flex: 1; font-size: 13px; }
+  .m-add { display: flex; gap: 8px; margin-top: 10px; }
+  .m-add .input { flex: 1; }
+
+  /* ============ toast ============ */
+  .toast {
+    position: fixed; bottom: 18px; left: 50%; transform: translateX(-50%);
+    background: var(--ink); color: var(--bg); border-radius: 12px;
+    padding: 11px 18px; font-size: 13px; z-index: 300; box-shadow: var(--shadow-lg);
+    animation: tin .2s ease-out;
+  }
+  @keyframes tin { from { opacity: 0; transform: translate(-50%, 8px); } to { opacity: 1; transform: translate(-50%, 0); } }
+
+  .print-only { display: none; }
+
+  @media (max-width: 560px) {
+    .summary { grid-template-columns: repeat(2, 1fr); }
+    .rec-thumb { width: 76px; height: 76px; }
+    .bar-name { width: 104px; }
+  }
+
+  /* ============ Print ============ */
+  @media print {
+    @page { margin: 14mm; }
+    body { background: #fff; }
+    header, .seg-tabs, .no-print, #tab-register, #tab-master { display: none !important; }
+    main { max-width: none; padding: 0; }
+    #tab-shukei { display: block !important; }
+    .print-only { display: block; }
+    .print-head { margin-bottom: 14px; padding-bottom: 8px; border-bottom: 2px solid var(--ink); }
+    .print-title { font-size: 18px; font-weight: 700; }
+    .print-sub { font-size: 12px; color: var(--text2); margin-top: 4px; }
+    .card, .rec, .sm-card { break-inside: avoid; }
+    .bar-track { border: 1px solid var(--border2); }
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <span class="brand">足場 是正 集計 <small>モック</small></span>
+  <div class="header-right">
+    <button class="btn btn-secondary btn-sm" id="btn-save">データ保存</button>
+    <button class="btn btn-secondary btn-sm" id="btn-load">データ読込</button>
+    <input type="file" id="import-input" accept="application/json" hidden>
+  </div>
+</header>
+
+<main>
+
+  <div class="banner" id="intro-banner">
+    <div>
+      <b>これは試作（モック）です。</b><br>
+      是正項目・工務店・生産担当は <b>仮の名前</b> を入れてあります。「マスタ管理」タブで実際の名前に書き換えてください。
+      写真を追加すると AI が是正項目を提案します（モックではランダム判定）。同僚さんに見せて意見をもらう用です。
+    </div>
+    <span class="x" id="banner-x" title="閉じる">×</span>
+  </div>
+
+  <div class="seg-tabs">
+    <button class="seg-tab active" data-tab="register">是正を登録</button>
+    <button class="seg-tab" data-tab="shukei">集計</button>
+    <button class="seg-tab" data-tab="master">マスタ管理</button>
+  </div>
+
+  <!-- ============ 是正を登録 ============ -->
+  <section id="tab-register">
+    <div class="card">
+      <div class="card-head"><div class="card-title">今回の入力セット</div></div>
+      <p class="hint">先にここを設定してから写真を追加すると、各カードに自動で入ります。カードごとに個別修正もできます。</p>
+      <div class="grid2">
+        <div class="full">
+          <label class="field-label">現場名</label>
+          <input type="text" class="input" id="set-genba" placeholder="例：松本邸">
+        </div>
+        <div>
+          <label class="field-label">工務店</label>
+          <select class="input" id="set-koumuten"></select>
+        </div>
+        <div>
+          <label class="field-label">生産担当</label>
+          <select class="input" id="set-tantou"></select>
+        </div>
+        <div class="full">
+          <label class="field-label">日付</label>
+          <input type="date" class="input" id="set-date">
+        </div>
+      </div>
+      <div class="setup-actions">
+        <label class="btn btn-primary file-btn">写真を選ぶ（複数可）
+          <input type="file" id="file-input" accept="image/*" multiple hidden>
+        </label>
+        <button class="btn btn-secondary" id="add-blank">＋ 写真なしで追加</button>
+      </div>
+    </div>
+
+    <div class="list-head">
+      <span>登録した是正</span>
+      <span class="list-count num" id="rec-count">0</span>
+    </div>
+    <div id="rec-list"></div>
+  </section>
+
+  <!-- ============ 集計 ============ -->
+  <section id="tab-shukei" style="display:none;">
+    <div class="print-only print-head">
+      <div class="print-title">足場 是正 集計表</div>
+      <div class="print-sub" id="print-meta"></div>
+    </div>
+
+    <div class="card no-print">
+      <div class="card-head">
+        <div class="card-title">集計</div>
+        <button class="btn btn-primary btn-sm" id="btn-pdf">PDF出力</button>
+      </div>
+      <div class="grid2">
+        <div>
+          <label class="field-label">工務店でしぼり込み</label>
+          <select class="input" id="f-koumuten"><option value="">すべて</option></select>
+        </div>
+        <div>
+          <label class="field-label">生産担当でしぼり込み</label>
+          <select class="input" id="f-tantou"><option value="">すべて</option></select>
+        </div>
+        <div>
+          <label class="field-label">期間（開始）</label>
+          <input type="date" class="input" id="f-from">
+        </div>
+        <div>
+          <label class="field-label">期間（終了）</label>
+          <input type="date" class="input" id="f-to">
+        </div>
+        <div class="full">
+          <label class="field-label">グラフの種類</label>
+          <select class="input" id="chart-type">
+            <option value="hbar">横棒グラフ</option>
+            <option value="vbar">縦棒グラフ</option>
+            <option value="pie">円グラフ</option>
+            <option value="table">表</option>
+          </select>
+        </div>
+        <div class="full">
+          <button class="btn btn-secondary btn-sm" id="f-clear">しぼり込みを解除</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="summary" id="summary"></div>
+
+    <div class="card">
+      <div class="card-head"><div class="card-title">是正項目別 件数</div></div>
+      <div id="agg-item"></div>
+    </div>
+
+    <div class="card">
+      <div class="card-head"><div class="card-title">工務店別 件数</div></div>
+      <div id="agg-koumuten"></div>
+    </div>
+
+    <div class="card">
+      <div class="card-head"><div class="card-title">月別 件数</div></div>
+      <div id="agg-month"></div>
+    </div>
+  </section>
+
+  <!-- ============ マスタ管理 ============ -->
+  <section id="tab-master" style="display:none;">
+    <div class="card">
+      <div class="card-head"><div class="card-title">是正項目（仮）</div></div>
+      <p class="hint">明日届く本物のリストに合わせて、ここを書き換えてください。並び順は追加した順です。</p>
+      <div id="m-items"></div>
+      <div class="m-add">
+        <input type="text" class="input" id="m-items-input" placeholder="是正項目を追加">
+        <button class="btn btn-primary btn-sm" data-add="items">追加</button>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-head"><div class="card-title">生産担当</div></div>
+      <div id="m-tantou"></div>
+      <div class="m-add">
+        <input type="text" class="input" id="m-tantou-input" placeholder="生産担当を追加">
+        <button class="btn btn-primary btn-sm" data-add="tantou">追加</button>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-head"><div class="card-title">工務店</div></div>
+      <div id="m-koumuten"></div>
+      <div class="m-add">
+        <input type="text" class="input" id="m-koumuten-input" placeholder="工務店を追加">
+        <button class="btn btn-primary btn-sm" data-add="koumuten">追加</button>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<script>
+"use strict";
+
+/* ===================== 状態 ===================== */
+var STORE_KEY = 'ashiba_seisei_mock_v4';
+var PALETTE = [
+  'oklch(0.55 0.14 155)', 'oklch(0.72 0.13 75)',  'oklch(0.60 0.13 240)',
+  'oklch(0.62 0.17 28)',  'oklch(0.58 0.13 310)', 'oklch(0.70 0.12 195)',
+  'oklch(0.68 0.14 128)', 'oklch(0.60 0.12 50)',  'oklch(0.55 0.11 270)',
+  'oklch(0.74 0.12 100)'
+];
+
+function defaultState() {
+  return {
+    schema: 2,
+    masters: {
+      items: [
+        '壁つなぎ不足・未設置',
+        '手すり・中さん不備',
+        '幅木（つま先板）未設置',
+        '筋かい・ブレース不足',
+        '足場板の隙間・固定不良',
+        '昇降設備（階段・はしご）不備',
+        'ジャッキベース・敷板不良',
+        '単管・クランプ緊結不良',
+        '建地の傾き・建入れ不良',
+        '朝顔（落下防護棚）未設置',
+        'メッシュシート未設置・破れ',
+        '開口部・すき間の養生不足',
+        '設置間隔・スパン不良',
+        'その他'
+      ],
+      tantou: ['担当A', '担当B', '担当C', '担当D', '担当E', '担当F'],
+      koumuten: ['A工務店', 'B工務店', 'C工務店']
+    },
+    records: []
+  };
+}
+
+/* サンプル是正データ（モック用・3か月ぶん） */
+function seedRecords() {
+  var s = [
+    ['2026-03-11','松本邸','A工務店','担当A','壁つなぎ不足・未設置',''],
+    ['2026-03-11','松本邸','A工務店','担当A','手すり・中さん不備','2階東面'],
+    ['2026-04-08','鈴木邸','B工務店','担当B','幅木（つま先板）未設置',''],
+    ['2026-04-08','鈴木邸','B工務店','担当B','壁つなぎ不足・未設置',''],
+    ['2026-04-22','高橋邸 新築','C工務店','担当C','筋かい・ブレース不足',''],
+    ['2026-05-07','高橋邸 新築','C工務店','担当C','足場板の隙間・固定不良','北側足場'],
+    ['2026-05-07','松本邸','A工務店','担当A','開口部・すき間の養生不足',''],
+    ['2026-05-12','鈴木邸','B工務店','担当B','壁つなぎ不足・未設置',''],
+    ['2026-05-14','高橋邸 新築','C工務店','担当C','昇降設備（階段・はしご）不備',''],
+    ['2026-05-16','大野邸','A工務店','担当D','メッシュシート未設置・破れ','']
+  ];
+  return s.map(function (r, i) {
+    return {
+      id: 'seed' + i, thumb: placeholderThumb(),
+      date: r[0], genba: r[1], koumuten: r[2], tantou: r[3],
+      item: r[4], memo: r[5], ai: false
+    };
+  });
+}
+
+var state = loadState();
+
+function loadState() {
+  try {
+    var raw = localStorage.getItem(STORE_KEY);
+    if (raw) {
+      var p = JSON.parse(raw);
+      if (p && p.masters && p.records) return p;
+    }
+  } catch (e) {}
+  var st = defaultState();
+  st.records = seedRecords();
+  return st;
+}
+function saveState() {
+  try { localStorage.setItem(STORE_KEY, JSON.stringify(state)); }
+  catch (e) { toast('保存できませんでした（写真が多すぎる可能性）'); }
+}
+
+/* ===================== ユーティリティ ===================== */
+function $(id) { return document.getElementById(id); }
+function esc(s) {
+  return String(s == null ? '' : s).replace(/[&<>"']/g, function (c) {
+    return { '&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;' }[c];
+  });
+}
+function uid() { return 'r' + Date.now() + Math.random().toString(36).slice(2, 7); }
+function todayStr() {
+  var d = new Date();
+  return d.getFullYear() + '-' + String(d.getMonth()+1).padStart(2,'0') + '-' + String(d.getDate()).padStart(2,'0');
+}
+function toast(msg) {
+  var t = document.createElement('div');
+  t.className = 'toast'; t.textContent = msg;
+  document.body.appendChild(t);
+  setTimeout(function () { t.remove(); }, 2600);
+}
+function placeholderThumb() {
+  var svg = "<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'>"
+    + "<rect width='100' height='100' fill='%23e8e6e1'/>"
+    + "<g stroke='%23b9c4ba' stroke-width='3' fill='none'>"
+    + "<line x1='22' y1='8' x2='22' y2='92'/><line x1='50' y1='8' x2='50' y2='92'/><line x1='78' y1='8' x2='78' y2='92'/>"
+    + "<line x1='8' y1='30' x2='92' y2='30'/><line x1='8' y1='58' x2='92' y2='58'/><line x1='8' y1='84' x2='92' y2='84'/>"
+    + "<line x1='22' y1='30' x2='50' y2='58'/></g>"
+    + "<text x='50' y='52' font-size='11' fill='%238a8a84' text-anchor='middle' font-family='sans-serif'>写真</text>"
+    + "</svg>";
+  return "data:image/svg+xml;charset=utf-8," + svg;
+}
+
+/* 画像を縮小して dataURL に（localStorage 節約） */
+function fileToThumb(file) {
+  return new Promise(function (resolve) {
+    var reader = new FileReader();
+    reader.onload = function (e) {
+      var img = new Image();
+      img.onload = function () {
+        var max = 520;
+        var w = img.width, h = img.height;
+        if (w > h && w > max) { h = h * max / w; w = max; }
+        else if (h >= w && h > max) { w = w * max / h; h = max; }
+        var cv = document.createElement('canvas');
+        cv.width = w; cv.height = h;
+        cv.getContext('2d').drawImage(img, 0, 0, w, h);
+        try { resolve(cv.toDataURL('image/jpeg', 0.72)); }
+        catch (err) { resolve(e.target.result); }
+      };
+      img.onerror = function () { resolve(placeholderThumb()); };
+      img.src = e.target.result;
+    };
+    reader.onerror = function () { resolve(placeholderThumb()); };
+    reader.readAsDataURL(file);
+  });
+}
+
+function optionsHtml(arr, selected) {
+  var h = '<option value="">（未設定）</option>';
+  arr.forEach(function (v) {
+    h += '<option value="' + esc(v) + '"' + (v === selected ? ' selected' : '') + '>' + esc(v) + '</option>';
+  });
+  return h;
+}
+
+/* ===================== タブ ===================== */
+var tabs = ['register', 'shukei', 'master'];
+function showTab(name) {
+  tabs.forEach(function (t) {
+    $('tab-' + t).style.display = (t === name) ? '' : 'none';
+  });
+  document.querySelectorAll('.seg-tab').forEach(function (b) {
+    b.classList.toggle('active', b.dataset.tab === name);
+  });
+  if (name === 'shukei') renderShukei();
+  if (name === 'master') renderMaster();
+}
+document.querySelectorAll('.seg-tab').forEach(function (b) {
+  b.addEventListener('click', function () { showTab(b.dataset.tab); });
+});
+
+/* ===================== 入力セット ===================== */
+function refreshSetSelects() {
+  var k = $('set-koumuten'), t = $('set-tantou');
+  var kv = k.value, tv = t.value;
+  k.innerHTML = optionsHtml(state.masters.koumuten, kv || state.masters.koumuten[0]);
+  t.innerHTML = optionsHtml(state.masters.tantou, tv);
+}
+$('set-date').value = todayStr();
+
+/* ===================== 是正レコードの描画 ===================== */
+function recordCardHtml(rec) {
+  var aiTag = rec.ai ? '<span class="pill pill-ai">AI提案</span>' : '';
+  return ''
+  + '<div class="rec" data-id="' + rec.id + '">'
+  +   '<div class="rec-row">'
+  +     '<div class="rec-thumb"><img src="' + (rec.thumb || placeholderThumb()) + '" alt=""></div>'
+  +     '<div class="rec-body">'
+  +       '<div class="rec-item-row">'
+  +         '<label class="field-label">是正項目 ' + aiTag + '</label>'
+  +         '<select class="input f-item">' + optionsHtml(state.masters.items, rec.item) + '</select>'
+  +       '</div>'
+  +       '<div class="grid2">'
+  +         '<div class="full"><label class="field-label">現場名</label>'
+  +           '<input type="text" class="input f-genba" value="' + esc(rec.genba) + '" placeholder="例：松本邸"></div>'
+  +         '<div><label class="field-label">日付</label>'
+  +           '<input type="date" class="input f-date" value="' + esc(rec.date) + '"></div>'
+  +         '<div><label class="field-label">工務店</label>'
+  +           '<select class="input f-koumuten">' + optionsHtml(state.masters.koumuten, rec.koumuten) + '</select></div>'
+  +         '<div><label class="field-label">生産担当</label>'
+  +           '<select class="input f-tantou">' + optionsHtml(state.masters.tantou, rec.tantou) + '</select></div>'
+  +         '<div><label class="field-label">メモ（任意）</label>'
+  +           '<input type="text" class="input f-memo" value="' + esc(rec.memo) + '" placeholder="場所や補足"></div>'
+  +       '</div>'
+  +       '<div class="rec-foot">'
+  +         '<button class="btn btn-del btn-sm f-del">この是正を削除</button>'
+  +       '</div>'
+  +     '</div>'
+  +   '</div>'
+  + '</div>';
+}
+
+function renderRecords() {
+  var list = $('rec-list');
+  $('rec-count').textContent = state.records.length;
+  if (!state.records.length) {
+    list.innerHTML = '<div class="empty">まだ是正がありません。<br>上の「写真を選ぶ」から、LINEワークスのスクショをまとめて追加してください。</div>';
+    return;
+  }
+  var recs = state.records.slice().reverse(); // 新しい順
+  list.innerHTML = recs.map(recordCardHtml).join('');
+  recs.forEach(function (rec) {
+    wireRecordCard(list.querySelector('.rec[data-id="' + rec.id + '"]'), rec);
+  });
+}
+
+function wireRecordCard(el, rec) {
+  if (!el) return;
+  function upd(field, val) { rec[field] = val; saveState(); }
+
+  el.querySelector('.f-item').addEventListener('change', function () {
+    rec.item = this.value; rec.ai = false; saveState();
+    var tag = el.querySelector('.pill-ai'); if (tag) tag.remove();
+  });
+  el.querySelector('.f-date').addEventListener('change', function () { upd('date', this.value); });
+  el.querySelector('.f-genba').addEventListener('input', function () { upd('genba', this.value); });
+  el.querySelector('.f-tantou').addEventListener('change', function () { upd('tantou', this.value); });
+  el.querySelector('.f-koumuten').addEventListener('change', function () { upd('koumuten', this.value); });
+  el.querySelector('.f-memo').addEventListener('input', function () { upd('memo', this.value); });
+
+  el.querySelector('.f-del').addEventListener('click', function () {
+    if (!confirm('この是正を削除します。よろしいですか？')) return;
+    state.records = state.records.filter(function (r) { return r.id !== rec.id; });
+    saveState(); renderRecords();
+    toast('削除しました');
+  });
+}
+
+/* ===================== 写真の追加 ===================== */
+function makeRecord(thumb) {
+  return {
+    id: uid(),
+    thumb: thumb || placeholderThumb(),
+    date: $('set-date').value || todayStr(),
+    genba: $('set-genba').value.trim(),
+    koumuten: $('set-koumuten').value,
+    tantou: $('set-tantou').value,
+    item: state.masters.items[Math.floor(Math.random() * state.masters.items.length)], // モックAI判定
+    memo: '',
+    ai: true
+  };
+}
+
+$('file-input').addEventListener('change', function () {
+  var files = Array.prototype.slice.call(this.files || []);
+  if (!files.length) return;
+  Promise.all(files.map(fileToThumb)).then(function (thumbs) {
+    thumbs.forEach(function (th) { state.records.push(makeRecord(th)); });
+    saveState(); renderRecords();
+    toast(files.length + ' 件を追加（AIが是正項目を仮提案）');
+  });
+  this.value = '';
+});
+
+$('add-blank').addEventListener('click', function () {
+  state.records.push(makeRecord(null));
+  saveState(); renderRecords();
+  toast('1 件を追加しました');
+});
+
+/* ===================== 集計：データ集計 ===================== */
+function getFiltered() {
+  var fk = $('f-koumuten').value, ft = $('f-tantou').value;
+  var ff = $('f-from').value, fto = $('f-to').value;
+  return state.records.filter(function (r) {
+    if (fk && r.koumuten !== fk) return false;
+    if (ft && r.tantou !== ft) return false;
+    if (ff && (!r.date || r.date < ff)) return false;
+    if (fto && (!r.date || r.date > fto)) return false;
+    return true;
+  });
+}
+function countBy(recs, key) {
+  var m = {};
+  recs.forEach(function (r) {
+    var k = r[key] || '（未設定）';
+    m[k] = (m[k] || 0) + 1;
+  });
+  return Object.keys(m).map(function (k) { return { name: k, n: m[k] }; })
+    .sort(function (a, b) { return b.n - a.n; });
+}
+function monthLabel(k) {
+  var p = k.split('-');
+  if (p.length < 2) return k;
+  return p[0] + '年' + (+p[1]) + '月';
+}
+function countByMonth(recs) {
+  var m = {};
+  recs.forEach(function (r) {
+    var k = (r.date || '').slice(0, 7) || '（日付なし）';
+    m[k] = (m[k] || 0) + 1;
+  });
+  return Object.keys(m).sort().map(function (k) {
+    return { name: monthLabel(k), n: m[k] };
+  });
+}
+
+/* ===================== 集計：グラフ描画 ===================== */
+function renderChart(rows, type) {
+  if (!rows.length) return '<div class="chart-empty">データがありません</div>';
+  var total = rows.reduce(function (s, r) { return s + r.n; }, 0);
+  if (type === 'table') return tableHtml(rows, total);
+  if (type === 'pie')   return pieHtml(rows, total);
+  if (type === 'vbar')  return vbarHtml(rows);
+  return hbarHtml(rows);
+}
+function hbarHtml(rows) {
+  var max = Math.max.apply(null, rows.map(function (r) { return r.n; })) || 1;
+  return rows.map(function (r) {
+    var w = Math.round(r.n / max * 100);
+    return '<div class="bar-row">'
+      + '<span class="bar-name">' + esc(r.name) + '</span>'
+      + '<span class="bar-track"><span class="bar-fill" style="width:' + w + '%"></span></span>'
+      + '<span class="bar-cnt num">' + r.n + '</span></div>';
+  }).join('');
+}
+function vbarHtml(rows) {
+  var max = Math.max.apply(null, rows.map(function (r) { return r.n; })) || 1;
+  return '<div class="vbar-wrap">' + rows.map(function (r, i) {
+    var h = Math.max(4, Math.round(r.n / max * 140));
+    return '<div class="vbar-col">'
+      + '<div class="vbar-plot"><span class="vbar-cnt num">' + r.n + '</span>'
+      + '<div class="vbar-bar" style="height:' + h + 'px;background:' + PALETTE[i % PALETTE.length] + '"></div></div>'
+      + '<div class="vbar-name">' + esc(r.name) + '</div></div>';
+  }).join('') + '</div>';
+}
+function arcPath(cx, cy, r, a0, a1) {
+  var x0 = cx + r * Math.cos(a0), y0 = cy + r * Math.sin(a0);
+  var x1 = cx + r * Math.cos(a1), y1 = cy + r * Math.sin(a1);
+  var large = (a1 - a0) > Math.PI ? 1 : 0;
+  return 'M' + cx + ' ' + cy + ' L' + x0.toFixed(3) + ' ' + y0.toFixed(3)
+    + ' A' + r + ' ' + r + ' 0 ' + large + ' 1 ' + x1.toFixed(3) + ' ' + y1.toFixed(3) + ' Z';
+}
+function pieHtml(rows, total) {
+  var slices = '', ang = -Math.PI / 2;
+  if (rows.length === 1) {
+    slices = '<circle cx="50" cy="50" r="46" style="fill:' + PALETTE[0] + '"/>';
+  } else {
+    rows.forEach(function (r, i) {
+      var a1 = ang + r.n / total * Math.PI * 2;
+      slices += '<path d="' + arcPath(50, 50, 46, ang, a1) + '" style="fill:' + PALETTE[i % PALETTE.length] + '"/>';
+      ang = a1;
+    });
+  }
+  var legend = rows.map(function (r, i) {
+    var pct = Math.round(r.n / total * 100);
+    return '<div class="lg-row">'
+      + '<span class="lg-dot" style="background:' + PALETTE[i % PALETTE.length] + '"></span>'
+      + '<span class="lg-name">' + esc(r.name) + '</span>'
+      + '<span class="lg-val num">' + r.n + '件 (' + pct + '%)</span></div>';
+  }).join('');
+  return '<div class="pie-wrap"><svg class="pie-svg" viewBox="0 0 100 100">' + slices
+    + '</svg><div class="pie-legend">' + legend + '</div></div>';
+}
+function tableHtml(rows, total) {
+  var body = rows.map(function (r) {
+    var pct = Math.round(r.n / total * 100);
+    return '<tr><td>' + esc(r.name) + '</td><td class="num ta-r">' + r.n
+      + '</td><td class="num ta-r">' + pct + '%</td></tr>';
+  }).join('');
+  return '<table class="agg-table"><thead><tr><th>項目</th><th class="ta-r">件数</th><th class="ta-r">割合</th></tr></thead>'
+    + '<tbody>' + body + '</tbody>'
+    + '<tfoot><tr><td>合計</td><td class="num ta-r">' + total + '</td><td class="ta-r">100%</td></tr></tfoot></table>';
+}
+
+/* ===================== 集計：画面 ===================== */
+function smCard(cls, num, label) {
+  return '<div class="sm-card ' + cls + '"><div class="sm-num num">' + num + '</div>'
+    + '<div class="sm-label">' + label + '</div></div>';
+}
+function renderShukei() {
+  var fk = $('f-koumuten'), ft = $('f-tantou');
+  var fkv = fk.value, ftv = ft.value;
+  fk.innerHTML = '<option value="">すべて</option>' + state.masters.koumuten.map(function (v) {
+    return '<option value="' + esc(v) + '"' + (v === fkv ? ' selected' : '') + '>' + esc(v) + '</option>';
+  }).join('');
+  ft.innerHTML = '<option value="">すべて</option>' + state.masters.tantou.map(function (v) {
+    return '<option value="' + esc(v) + '"' + (v === ftv ? ' selected' : '') + '>' + esc(v) + '</option>';
+  }).join('');
+
+  var recs = getFiltered();
+  var items = countBy(recs, 'item');
+  var koumuten = countBy(recs, 'koumuten');
+  var months = countByMonth(recs);
+  var genba = {};
+  recs.forEach(function (r) { if (r.genba) genba[r.genba] = 1; });
+  var type = $('chart-type').value;
+
+  $('summary').innerHTML = ''
+    + smCard('ink', recs.length, '是正 総件数')
+    + smCard('', Object.keys(genba).length, '対象 現場数')
+    + smCard('', items.length, '是正項目の種類')
+    + smCard('', months.length, '対象 月数');
+
+  $('agg-item').innerHTML = renderChart(items, type);
+  $('agg-koumuten').innerHTML = renderChart(koumuten, type);
+  $('agg-month').innerHTML = renderChart(months, type);
+
+  var meta = [];
+  if ($('f-koumuten').value) meta.push('工務店：' + $('f-koumuten').value);
+  if ($('f-tantou').value) meta.push('生産担当：' + $('f-tantou').value);
+  if ($('f-from').value || $('f-to').value) meta.push('期間：' + ($('f-from').value || '') + ' 〜 ' + ($('f-to').value || ''));
+  meta.push('総件数 ' + recs.length + ' 件');
+  $('print-meta').textContent = meta.join('　／　') + '　（出力：' + todayStr() + '）';
+}
+['f-koumuten','f-tantou','f-from','f-to','chart-type'].forEach(function (id) {
+  $(id).addEventListener('change', renderShukei);
+});
+$('f-clear').addEventListener('click', function () {
+  $('f-koumuten').value = ''; $('f-tantou').value = '';
+  $('f-from').value = ''; $('f-to').value = '';
+  renderShukei();
+});
+$('btn-pdf').addEventListener('click', function () {
+  renderShukei();
+  setTimeout(function () { window.print(); }, 60);
+});
+
+/* ===================== マスタ管理 ===================== */
+function masterRows(kind, arr) {
+  if (!arr.length) return '<div class="m-row" style="color:var(--text3);">まだありません</div>';
+  return arr.map(function (v, i) {
+    return '<div class="m-row" data-kind="' + kind + '" data-i="' + i + '">'
+      + '<span class="m-name">' + esc(v) + '</span>'
+      + '<button class="btn btn-ghost btn-sm m-edit">修正</button>'
+      + '<button class="btn btn-del btn-sm m-del">削除</button>'
+      + '</div>';
+  }).join('');
+}
+function renderMaster() {
+  $('m-items').innerHTML = masterRows('items', state.masters.items);
+  $('m-tantou').innerHTML = masterRows('tantou', state.masters.tantou);
+  $('m-koumuten').innerHTML = masterRows('koumuten', state.masters.koumuten);
+}
+$('tab-master').addEventListener('click', function (e) {
+  var row = e.target.closest('.m-row');
+  if (row) {
+    var kind = row.dataset.kind, i = +row.dataset.i;
+    if (e.target.classList.contains('m-edit')) {
+      var nv = prompt('修正：', state.masters[kind][i]);
+      if (nv && nv.trim()) { state.masters[kind][i] = nv.trim(); saveState(); renderMaster(); }
+    } else if (e.target.classList.contains('m-del')) {
+      if (confirm('「' + state.masters[kind][i] + '」を削除しますか？')) {
+        state.masters[kind].splice(i, 1); saveState(); renderMaster();
+        if (kind === 'koumuten' || kind === 'tantou') refreshSetSelects();
+      }
+    }
+    return;
+  }
+  var addBtn = e.target.closest('[data-add]');
+  if (addBtn) {
+    var kind2 = addBtn.dataset.add;
+    var inp = $('m-' + kind2 + '-input');
+    var val = inp.value.trim();
+    if (!val) return;
+    state.masters[kind2].push(val);
+    inp.value = ''; saveState(); renderMaster();
+    if (kind2 === 'koumuten' || kind2 === 'tantou') refreshSetSelects();
+    toast('追加しました');
+  }
+});
+document.querySelectorAll('.m-add .input').forEach(function (inp) {
+  inp.addEventListener('keydown', function (e) {
+    if (e.key === 'Enter') inp.closest('.card').querySelector('[data-add]').click();
+  });
+});
+
+/* ===================== 保存・読込 ===================== */
+$('btn-save').addEventListener('click', function () {
+  var blob = new Blob([JSON.stringify(state, null, 2)], { type: 'application/json' });
+  var a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = 'ashiba_seisei_' + todayStr() + '.json';
+  a.click();
+  URL.revokeObjectURL(a.href);
+  toast('データを書き出しました（Documentsアプリ経由でseiun-nxへ）');
+});
+$('btn-load').addEventListener('click', function () { $('import-input').click(); });
+$('import-input').addEventListener('change', function () {
+  var f = this.files && this.files[0];
+  if (!f) return;
+  var rd = new FileReader();
+  rd.onload = function (e) {
+    try {
+      var p = JSON.parse(e.target.result);
+      if (!p.masters || !p.records) throw 0;
+      state = p; saveState();
+      refreshSetSelects(); renderRecords(); showTab('register');
+      toast('データを読み込みました');
+    } catch (err) { toast('読み込めませんでした（形式が違います）'); }
+  };
+  rd.readAsText(f);
+  this.value = '';
+});
+
+/* ===================== バナー ===================== */
+$('banner-x').addEventListener('click', function () { $('intro-banner').style.display = 'none'; });
+
+/* ===================== 初期描画 ===================== */
+refreshSetSelects();
+renderRecords();
+</script>
+</body>
+</html>
