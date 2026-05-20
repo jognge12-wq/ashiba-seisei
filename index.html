@@ -615,7 +615,7 @@ function renderInput() {
     return (b.date || '').localeCompare(a.date || '') || (b.id > a.id ? 1 : -1);
   });
   var listHtml = sorted.length ? sorted.map(function (t) {
-    var bd = Object.keys(t.counts).map(function (k) { return { k: k, n: t.counts[k] }; })
+    var bd = Object.keys(t.counts || {}).map(function (k) { return { k: k, n: t.counts[k] }; })
       .sort(function (a, b) { return b.n - a.n; });
     var bdHtml = bd.map(function (r) {
       return '<div class="tl-bd-row"><span>' + esc(r.k) + '</span><span class="n num">' + r.n + ' 件</span></div>';
@@ -694,8 +694,10 @@ function wireInput(rows, showGyosha) {
   document.querySelectorAll('#tl-list .tl-card').forEach(function (card) {
     var id = card.dataset.id;
     card.querySelector('.tl-toggle').addEventListener('click', function () {
-      expandedId = (expandedId === id) ? null : id;
-      renderInput();
+      var wasOpen = card.classList.contains('open');
+      document.querySelectorAll('#tl-list .tl-card.open').forEach(function (c) { c.classList.remove('open'); });
+      if (!wasOpen) card.classList.add('open');
+      expandedId = wasOpen ? null : id;
     });
     card.querySelector('.tl-edit').addEventListener('click', function () {
       var t = state.tallies.filter(function (x) { return x.id === id; })[0];
@@ -886,6 +888,7 @@ $('f-clear').addEventListener('click', function () {
 $('btn-pdf').addEventListener('click', function () {
   window.print();
 });
+window.addEventListener('beforeprint', function () { renderShukei(); });
 
 /* ===== マスタ管理 ===== */
 function masterRows(kind, arr) {
@@ -953,8 +956,13 @@ $('import-input').addEventListener('change', function () {
   rd.onload = function (e) {
     try {
       var p = JSON.parse(e.target.result);
-      if (!p.masters || !p.tallies) throw 0;
-      if (!p.masters.gyosha) p.masters.gyosha = ['足場業者A'];
+      if (!p || !p.masters || !Array.isArray(p.tallies)) throw 0;
+      ['items', 'gyosha', 'koumuten', 'tantou'].forEach(function (k) {
+        if (!Array.isArray(p.masters[k])) p.masters[k] = [];
+      });
+      p.tallies.forEach(function (t) {
+        if (!t.counts || typeof t.counts !== 'object') t.counts = {};
+      });
       state = p;
       try { localStorage.setItem(STORE_KEY, JSON.stringify(state)); } catch (er) {}
       dirty = false; updateSaveStatus();
