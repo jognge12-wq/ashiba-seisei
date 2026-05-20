@@ -8,58 +8,51 @@
   /* ===== ms-hub Design Tokens ===== */
   :root {
     --font: system-ui, -apple-system, "Hiragino Sans", "Hiragino Kaku Gothic ProN", "Yu Gothic", "Meiryo", sans-serif;
-    --primary:   oklch(0.55 0.14 155);
-    --brand:        oklch(0.55 0.14 155);
-    --brand-ink:    oklch(0.35 0.11 155);
-    --brand-soft:   oklch(0.94 0.04 155);
+    --brand: oklch(0.55 0.14 155);
+    --brand-ink: oklch(0.35 0.11 155);
+    --brand-soft: oklch(0.94 0.04 155);
     --brand-softer: oklch(0.97 0.02 155);
-    --brand-line:   oklch(0.88 0.04 155);
-    --bg:      oklch(0.985 0.003 95);
+    --brand-line: oklch(0.88 0.04 155);
+    --bg: oklch(0.985 0.003 95);
     --surface: #ffffff;
     --surface2: oklch(0.97 0.005 95);
-    --sfc-light: oklch(0.99 0.003 95);
-    --border:  oklch(0.92 0.005 95);
+    --border: oklch(0.92 0.005 95);
     --border2: oklch(0.88 0.006 95);
-    --text1:   oklch(0.22 0.01 95);
-    --text2:   oklch(0.38 0.01 95);
-    --text3:   oklch(0.55 0.008 95);
-    --ink:     oklch(0.22 0.01 95);
-    --line:    oklch(0.92 0.005 95);
-    --green:   oklch(0.52 0.16 155);
-    --amber:   oklch(0.78 0.12 85);
+    --text1: oklch(0.22 0.01 95);
+    --text2: oklch(0.38 0.01 95);
+    --text3: oklch(0.55 0.008 95);
+    --ink: oklch(0.22 0.01 95);
+    --line: oklch(0.92 0.005 95);
+    --amber: oklch(0.78 0.12 85);
     --amber-l: oklch(0.96 0.04 85);
     --amber-ink: oklch(0.40 0.10 80);
-    --red:     oklch(0.58 0.18 25);
-    --red-l:   oklch(0.96 0.04 25);
+    --red: oklch(0.58 0.18 25);
+    --red-l: oklch(0.96 0.04 25);
     --shadow-sm: 0 1px 2px rgba(15,25,20,0.04);
-    --shadow:    0 1px 3px rgba(15,25,20,0.05), 0 1px 2px rgba(15,25,20,0.04);
     --shadow-lg: 0 4px 20px rgba(15,25,20,0.06), 0 1px 3px rgba(15,25,20,0.04);
   }
   @media (prefers-color-scheme: dark) {
     :root {
-      --primary:   oklch(0.68 0.18 155);
-      --brand:        oklch(0.68 0.18 155);
-      --brand-ink:    oklch(0.82 0.14 155);
-      --brand-soft:   oklch(0.30 0.05 155);
+      --brand: oklch(0.68 0.18 155);
+      --brand-ink: oklch(0.82 0.14 155);
+      --brand-soft: oklch(0.30 0.05 155);
       --brand-softer: oklch(0.25 0.03 155);
-      --brand-line:   oklch(0.35 0.05 155);
-      --bg:       oklch(0.18 0.005 95);
-      --surface:  oklch(0.22 0.006 95);
+      --brand-line: oklch(0.35 0.05 155);
+      --bg: oklch(0.18 0.005 95);
+      --surface: oklch(0.22 0.006 95);
       --surface2: oklch(0.26 0.007 95);
-      --sfc-light: oklch(0.28 0.007 95);
-      --border:   oklch(0.30 0.008 95);
-      --border2:  oklch(0.27 0.007 95);
+      --border: oklch(0.30 0.008 95);
+      --border2: oklch(0.27 0.007 95);
       --text1: oklch(0.95 0.005 95);
       --text2: oklch(0.78 0.006 95);
       --text3: oklch(0.60 0.008 95);
-      --ink:   oklch(0.95 0.005 95);
-      --line:  oklch(0.30 0.008 95);
-      --green:   oklch(0.68 0.18 155);
-      --amber:   oklch(0.85 0.12 85);
+      --ink: oklch(0.95 0.005 95);
+      --line: oklch(0.30 0.008 95);
+      --amber: oklch(0.85 0.12 85);
       --amber-l: oklch(0.28 0.06 80);
       --amber-ink: oklch(0.85 0.12 85);
-      --red:     oklch(0.70 0.15 25);
-      --red-l:   oklch(0.28 0.06 25);
+      --red: oklch(0.70 0.15 25);
+      --red-l: oklch(0.28 0.06 25);
     }
     body { color-scheme: dark; }
   }
@@ -67,40 +60,34 @@
   * { box-sizing: border-box; margin: 0; padding: 0; }
   html, body { height: 100%; }
   body {
-    font-family: var(--font);
-    background: var(--bg);
-    color: var(--text1);
-    font-size: 14px;
-    -webkit-font-smoothing: antialiased;
-    -webkit-print-color-adjust: exact;
-    print-color-adjust: exact;
+    font-family: var(--font); background: var(--bg); color: var(--text1);
+    font-size: 14px; -webkit-font-smoothing: antialiased;
+    -webkit-print-color-adjust: exact; print-color-adjust: exact;
   }
   .num { font-variant-numeric: tabular-nums; }
 
-  /* ============ Header ============ */
+  /* ===== Header ===== */
   header {
-    background: var(--surface);
-    border-bottom: 1px solid var(--border);
-    padding: 10px 16px;
-    display: flex; align-items: center; justify-content: space-between;
+    background: var(--surface); border-bottom: 1px solid var(--border);
+    padding: 9px 16px; display: flex; align-items: center; justify-content: space-between;
     gap: 10px; position: sticky; top: 0; z-index: 100; flex-wrap: wrap;
   }
   .brand {
-    font-weight: 700; color: var(--ink); font-size: 15px;
-    letter-spacing: -0.01em;
+    font-weight: 700; color: var(--ink); font-size: 15px; letter-spacing: -0.01em;
     padding-left: 10px; border-left: 3px solid var(--brand);
     display: flex; align-items: baseline; gap: 8px;
   }
   .brand small {
-    font-size: 10px; font-weight: 600; color: #fff;
-    background: var(--amber); padding: 2px 7px; border-radius: 100px;
-    letter-spacing: 0.02em;
+    font-size: 10px; font-weight: 600; color: #fff; background: var(--amber);
+    padding: 2px 7px; border-radius: 100px;
   }
   .header-right { display: flex; gap: 8px; align-items: center; flex-wrap: wrap; }
+  .save-status { font-size: 11px; color: var(--text3); white-space: nowrap; }
+  .save-status.dirty { color: var(--amber-ink); font-weight: 600; }
 
   main { max-width: 920px; margin: 0 auto; padding: 14px 16px 80px; }
 
-  /* ============ Buttons ============ */
+  /* ===== Buttons ===== */
   .btn {
     padding: 8px 14px; border-radius: 10px; font-size: 13px; font-weight: 600;
     cursor: pointer; font-family: inherit; border: none; line-height: 1.2;
@@ -113,28 +100,22 @@
   .btn-secondary { background: var(--surface2); color: var(--ink); }
   .btn-secondary:hover:not(:disabled) { background: var(--border); }
   .btn-ghost { background: transparent; color: var(--text2); padding: 6px 8px; }
-  .btn-ghost:hover { color: var(--text1); }
   .btn-del { background: transparent; color: var(--red); padding: 6px 10px; }
-  .btn-del:hover { background: var(--red-l); }
   .btn-sm { padding: 6px 10px; font-size: 12px; }
 
-  /* ============ Seg tabs ============ */
+  /* ===== Seg tabs ===== */
   .seg-tabs {
     display: flex; gap: 6px; padding: 4px; background: var(--surface2);
     border-radius: 12px; margin-bottom: 14px;
   }
   .seg-tab {
-    flex: 1; padding: 9px 8px; text-align: center;
-    font-size: 13px; font-weight: 600; color: var(--text2);
-    background: transparent; border: none; border-radius: 8px;
+    flex: 1; padding: 9px 8px; text-align: center; font-size: 13px; font-weight: 600;
+    color: var(--text2); background: transparent; border: none; border-radius: 8px;
     cursor: pointer; transition: all .15s; font-family: inherit;
   }
-  .seg-tab:hover { color: var(--text1); }
-  .seg-tab.active {
-    background: var(--surface); color: var(--brand); box-shadow: var(--shadow-sm);
-  }
+  .seg-tab.active { background: var(--surface); color: var(--brand); box-shadow: var(--shadow-sm); }
 
-  /* ============ Card ============ */
+  /* ===== Card ===== */
   .card {
     background: var(--surface); border: 1.5px solid var(--border);
     border-radius: 14px; padding: 14px 16px; margin-bottom: 12px;
@@ -147,18 +128,15 @@
   .card-title { font-size: 15px; font-weight: 700; color: var(--ink); flex: 1; letter-spacing: -0.01em; }
   .hint { font-size: 12px; color: var(--text2); line-height: 1.6; margin-bottom: 10px; }
 
-  /* ============ Inputs ============ */
-  .field-label {
-    display: flex; align-items: center; gap: 6px;
-    font-size: 11px; font-weight: 600; color: var(--text2); margin-bottom: 4px;
-  }
+  /* ===== Inputs ===== */
+  .field-label { display: block; font-size: 11px; font-weight: 600; color: var(--text2); margin-bottom: 4px; }
   .input {
-    width: 100%; border: none; background: var(--surface2);
-    border-radius: 9px; padding: 9px 11px; font-size: 14px;
-    color: var(--ink); font-family: inherit; transition: background .12s;
+    width: 100%; border: none; background: var(--surface2); border-radius: 9px;
+    padding: 9px 11px; font-size: 14px; color: var(--ink); font-family: inherit; transition: background .12s;
   }
   .input:focus { outline: none; background: var(--surface); box-shadow: inset 0 0 0 1px var(--border2); }
-  select.input { appearance: none; -webkit-appearance: none;
+  select.input {
+    appearance: none; -webkit-appearance: none;
     background-image: url("data:image/svg+xml,%3Csvg width='10' height='6' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M1 1l4 4 4-4' stroke='%23999' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");
     background-repeat: no-repeat; background-position: right 11px center; padding-right: 28px;
   }
@@ -166,7 +144,7 @@
   .grid2 > * { min-width: 0; }
   .grid2 .full { grid-column: 1 / -1; }
 
-  /* ============ Banner ============ */
+  /* ===== Banner ===== */
   .banner {
     background: var(--amber-l); border: 1px solid oklch(0.88 0.10 85);
     border-radius: 12px; padding: 10px 14px; margin-bottom: 14px;
@@ -176,69 +154,69 @@
   .banner b { font-weight: 700; }
   .banner .x { margin-left: auto; cursor: pointer; font-size: 16px; line-height: 1; padding: 0 4px; flex-shrink: 0; }
 
-  /* ============ Setup actions ============ */
-  .setup-actions { display: flex; gap: 8px; margin-top: 12px; flex-wrap: wrap; }
-  .file-btn { display: inline-flex; align-items: center; }
+  /* ===== Counter list ===== */
+  .cnt-total { font-size: 13px; font-weight: 700; color: var(--brand); }
+  .cnt-row {
+    display: flex; align-items: center; gap: 10px;
+    padding: 8px 6px; border-top: 1px solid var(--border); border-radius: 8px;
+  }
+  .cnt-row:first-child { border-top: none; }
+  .cnt-row.has { background: var(--brand-softer); }
+  .cnt-name { flex: 1; font-size: 13px; line-height: 1.35; }
+  .cnt-ctrl { display: flex; align-items: center; gap: 7px; flex-shrink: 0; }
+  .cnt-btn {
+    width: 38px; height: 38px; border-radius: 10px; border: none;
+    background: var(--surface2); color: var(--ink); font-size: 21px; font-weight: 700;
+    cursor: pointer; display: flex; align-items: center; justify-content: center;
+    line-height: 1; font-family: inherit; transition: transform .06s;
+  }
+  .cnt-btn:active:not(:disabled) { transform: scale(0.9); }
+  .cnt-btn.plus { background: var(--brand); color: #fff; }
+  .cnt-btn:disabled { opacity: .35; cursor: default; }
+  .cnt-num {
+    width: 46px; height: 38px; text-align: center; border: none; background: var(--surface2);
+    border-radius: 10px; font-size: 16px; font-weight: 700; color: var(--ink);
+    font-family: inherit; font-variant-numeric: tabular-nums;
+  }
+  .cnt-num:focus { outline: none; box-shadow: inset 0 0 0 1px var(--border2); }
+  .cnt-row.has .cnt-num { color: var(--brand); }
 
-  /* ============ Record list ============ */
+  .form-actions { display: flex; gap: 8px; margin-top: 4px; }
+
+  /* ===== Saved tally list ===== */
   .list-head {
     display: flex; align-items: center; gap: 8px;
-    margin: 4px 2px 8px; font-size: 12px; font-weight: 700; color: var(--text2);
+    margin: 16px 2px 8px; font-size: 12px; font-weight: 700; color: var(--text2);
   }
-  .list-count {
-    font-size: 11px; font-weight: 700; color: #fff; background: var(--text3);
-    border-radius: 100px; padding: 1px 8px;
+  .list-count { font-size: 11px; font-weight: 700; color: #fff; background: var(--text3); border-radius: 100px; padding: 1px 8px; }
+  .tl-row {
+    display: flex; align-items: center; gap: 10px; padding: 10px 12px;
+    border: 1.5px solid var(--border); border-radius: 12px; margin-bottom: 8px; background: var(--surface);
   }
-  .rec {
-    background: var(--surface); border: 1.5px solid var(--border);
-    border-radius: 14px; margin-bottom: 10px; overflow: hidden;
-  }
-  .rec-row { display: flex; gap: 12px; padding: 12px; }
-  .rec-thumb {
-    width: 104px; height: 104px; border-radius: 11px; flex-shrink: 0;
-    background: var(--surface2); overflow: hidden;
-  }
-  .rec-thumb img { width: 100%; height: 100%; object-fit: cover; display: block; }
-  .rec-body { flex: 1; min-width: 0; }
-  .rec-item-row { margin-bottom: 8px; }
-  .rec-foot {
-    display: flex; justify-content: flex-end; margin-top: 10px;
-    padding-top: 10px; border-top: 1px solid var(--line);
-  }
-  .pill {
-    font-size: 10px; font-weight: 700; padding: 2px 9px; border-radius: 100px;
-    white-space: nowrap;
-  }
-  .pill-ai { background: var(--brand-soft); color: var(--brand-ink); }
-
+  .tl-row.editing { border-color: var(--brand); background: var(--brand-softer); }
+  .tl-main { flex: 1; min-width: 0; cursor: pointer; }
+  .tl-genba { font-size: 13px; font-weight: 700; }
+  .tl-meta { font-size: 11px; color: var(--text2); margin-top: 2px; }
+  .tl-cnt { font-size: 12px; font-weight: 700; color: #fff; background: var(--brand); border-radius: 100px; padding: 2px 9px; flex-shrink: 0; }
   .empty {
-    padding: 44px 20px; text-align: center; color: var(--text3);
-    line-height: 1.9; font-size: 13px;
-    border: 1.5px dashed var(--border2); border-radius: 14px;
+    padding: 36px 20px; text-align: center; color: var(--text3); line-height: 1.9;
+    font-size: 13px; border: 1.5px dashed var(--border2); border-radius: 14px;
   }
 
-  /* ============ 集計：サマリー ============ */
+  /* ===== 集計 ===== */
   .summary { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; margin-bottom: 14px; }
-  .sm-card {
-    background: var(--surface); border: 1.5px solid var(--border);
-    border-radius: 12px; padding: 12px 10px; text-align: center;
-  }
+  .sm-card { background: var(--surface); border: 1.5px solid var(--border); border-radius: 12px; padding: 12px 10px; text-align: center; }
   .sm-num { font-size: 26px; font-weight: 700; line-height: 1; color: var(--brand); }
   .sm-card.ink .sm-num { color: var(--ink); }
   .sm-label { font-size: 11px; color: var(--text2); margin-top: 6px; }
 
-  /* ============ グラフ：横棒 ============ */
-  .bar-row {
-    display: flex; align-items: center; gap: 10px;
-    padding: 9px 14px; border-top: 1px solid var(--border);
-  }
+  .bar-row { display: flex; align-items: center; gap: 10px; padding: 9px 14px; border-top: 1px solid var(--border); }
   .bar-row:first-child { border-top: none; }
   .bar-name { font-size: 12px; color: var(--text1); width: 168px; flex-shrink: 0; }
   .bar-track { display: block; flex: 1; height: 18px; background: var(--surface2); border-radius: 100px; overflow: hidden; }
   .bar-fill { display: block; height: 100%; background: var(--brand); border-radius: 100px; min-width: 3px; }
   .bar-cnt { font-size: 13px; font-weight: 700; width: 40px; text-align: right; flex-shrink: 0; }
 
-  /* ============ グラフ：縦棒 ============ */
   .vbar-wrap { display: flex; gap: 6px; padding: 14px 14px 0; align-items: flex-end; }
   .vbar-col { flex: 1; min-width: 0; }
   .vbar-plot { height: 172px; display: flex; flex-direction: column; justify-content: flex-end; align-items: center; }
@@ -246,7 +224,6 @@
   .vbar-bar { width: 100%; max-width: 46px; border-radius: 6px 6px 0 0; }
   .vbar-name { font-size: 10px; color: var(--text2); text-align: center; padding: 7px 2px 12px; line-height: 1.3; word-break: break-word; }
 
-  /* ============ グラフ：円 ============ */
   .pie-wrap { display: flex; gap: 18px; align-items: center; padding: 14px; flex-wrap: wrap; }
   .pie-svg { width: 168px; height: 168px; flex-shrink: 0; }
   .pie-legend { flex: 1; min-width: 220px; display: flex; flex-direction: column; gap: 7px; }
@@ -255,56 +232,43 @@
   .lg-name { flex: 1; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
   .lg-val { color: var(--text2); flex-shrink: 0; }
 
-  /* ============ グラフ：表 ============ */
   .agg-table { width: 100%; border-collapse: collapse; font-size: 13px; }
-  .agg-table th {
-    font-size: 11px; color: var(--text2); font-weight: 600; text-align: left;
-    padding: 8px 12px; border-bottom: 1px solid var(--border);
-  }
+  .agg-table th { font-size: 11px; color: var(--text2); font-weight: 600; text-align: left; padding: 8px 12px; border-bottom: 1px solid var(--border); }
   .agg-table td { padding: 8px 12px; border-top: 1px solid var(--border); }
   .agg-table .ta-r { text-align: right; }
   .agg-table tfoot td { font-weight: 700; border-top: 1.5px solid var(--border2); }
   .chart-empty { padding: 26px 14px; color: var(--text3); font-size: 13px; text-align: center; }
 
-  /* ============ master ============ */
-  .m-row {
-    display: flex; align-items: center; gap: 8px;
-    padding: 9px 12px; border-top: 1px solid var(--border);
-  }
+  /* ===== master ===== */
+  .m-row { display: flex; align-items: center; gap: 8px; padding: 9px 12px; border-top: 1px solid var(--border); }
   .m-row:first-of-type { border-top: none; }
   .m-name { flex: 1; font-size: 13px; }
   .m-add { display: flex; gap: 8px; margin-top: 10px; }
   .m-add .input { flex: 1; }
 
-  /* ============ toast ============ */
   .toast {
     position: fixed; bottom: 18px; left: 50%; transform: translateX(-50%);
-    background: var(--ink); color: var(--bg); border-radius: 12px;
-    padding: 11px 18px; font-size: 13px; z-index: 300; box-shadow: var(--shadow-lg);
-    animation: tin .2s ease-out;
+    background: var(--ink); color: var(--bg); border-radius: 12px; padding: 11px 18px;
+    font-size: 13px; z-index: 300; box-shadow: var(--shadow-lg); animation: tin .2s ease-out;
   }
   @keyframes tin { from { opacity: 0; transform: translate(-50%, 8px); } to { opacity: 1; transform: translate(-50%, 0); } }
 
   .print-only { display: none; }
-
   @media (max-width: 560px) {
     .summary { grid-template-columns: repeat(2, 1fr); }
-    .rec-thumb { width: 76px; height: 76px; }
     .bar-name { width: 104px; }
   }
-
-  /* ============ Print ============ */
   @media print {
     @page { margin: 14mm; }
     body { background: #fff; }
-    header, .seg-tabs, .no-print, #tab-register, #tab-master { display: none !important; }
+    header, .seg-tabs, .no-print, #tab-input, #tab-master { display: none !important; }
     main { max-width: none; padding: 0; }
     #tab-shukei { display: block !important; }
     .print-only { display: block; }
     .print-head { margin-bottom: 14px; padding-bottom: 8px; border-bottom: 2px solid var(--ink); }
     .print-title { font-size: 18px; font-weight: 700; }
     .print-sub { font-size: 12px; color: var(--text2); margin-top: 4px; }
-    .card, .rec, .sm-card { break-inside: avoid; }
+    .card, .sm-card { break-inside: avoid; }
     .bar-track { border: 1px solid var(--border2); }
   }
 </style>
@@ -314,8 +278,9 @@
 <header>
   <span class="brand">足場 是正 集計 <small>モック</small></span>
   <div class="header-right">
-    <button class="btn btn-secondary btn-sm" id="btn-save">データ保存</button>
-    <button class="btn btn-secondary btn-sm" id="btn-load">データ読込</button>
+    <span class="save-status" id="save-status">未保存</span>
+    <button class="btn btn-secondary btn-sm" id="btn-save">データ書き出し</button>
+    <button class="btn btn-secondary btn-sm" id="btn-load">データ読み込み</button>
     <input type="file" id="import-input" accept="application/json" hidden>
   </div>
 </header>
@@ -325,63 +290,27 @@
   <div class="banner" id="intro-banner">
     <div>
       <b>これは試作（モック）です。</b><br>
-      是正項目・工務店・生産担当は <b>仮の名前</b> を入れてあります。「マスタ管理」タブで実際の名前に書き換えてください。
-      写真を追加すると AI が是正項目を提案します（モックではランダム判定）。同僚さんに見せて意見をもらう用です。
+      是正項目・工務店・生産担当は <b>仮の名前</b> です（「マスタ管理」タブで実際の名前に書き換えてください）。
+      使い方：LINEワークスで是正写真を見ながら、是正項目を「＋」していき、最後に「登録」。
+      「データ書き出し」でファイルを保存すれば、PC・スマホ・タブレットで共有できます（seiun-nx想定）。
     </div>
     <span class="x" id="banner-x" title="閉じる">×</span>
   </div>
 
   <div class="seg-tabs">
-    <button class="seg-tab active" data-tab="register">是正を登録</button>
+    <button class="seg-tab active" data-tab="input">是正を入力</button>
     <button class="seg-tab" data-tab="shukei">集計</button>
     <button class="seg-tab" data-tab="master">マスタ管理</button>
   </div>
 
-  <!-- ============ 是正を登録 ============ -->
-  <section id="tab-register">
-    <div class="card">
-      <div class="card-head"><div class="card-title">今回の入力セット</div></div>
-      <p class="hint">先にここを設定してから写真を追加すると、各カードに自動で入ります。カードごとに個別修正もできます。</p>
-      <div class="grid2">
-        <div class="full">
-          <label class="field-label">現場名</label>
-          <input type="text" class="input" id="set-genba" placeholder="例：松本邸">
-        </div>
-        <div>
-          <label class="field-label">工務店</label>
-          <select class="input" id="set-koumuten"></select>
-        </div>
-        <div>
-          <label class="field-label">生産担当</label>
-          <select class="input" id="set-tantou"></select>
-        </div>
-        <div class="full">
-          <label class="field-label">日付</label>
-          <input type="date" class="input" id="set-date">
-        </div>
-      </div>
-      <div class="setup-actions">
-        <label class="btn btn-primary file-btn">写真を選ぶ（複数可）
-          <input type="file" id="file-input" accept="image/*" multiple hidden>
-        </label>
-        <button class="btn btn-secondary" id="add-blank">＋ 写真なしで追加</button>
-      </div>
-    </div>
+  <section id="tab-input"></section>
 
-    <div class="list-head">
-      <span>登録した是正</span>
-      <span class="list-count num" id="rec-count">0</span>
-    </div>
-    <div id="rec-list"></div>
-  </section>
-
-  <!-- ============ 集計 ============ -->
+  <!-- ===== 集計 ===== -->
   <section id="tab-shukei" style="display:none;">
     <div class="print-only print-head">
       <div class="print-title">足場 是正 集計表</div>
       <div class="print-sub" id="print-meta"></div>
     </div>
-
     <div class="card no-print">
       <div class="card-head">
         <div class="card-title">集計</div>
@@ -418,30 +347,26 @@
         </div>
       </div>
     </div>
-
     <div class="summary" id="summary"></div>
-
     <div class="card">
       <div class="card-head"><div class="card-title">是正項目別 件数</div></div>
       <div id="agg-item"></div>
     </div>
-
     <div class="card">
       <div class="card-head"><div class="card-title">工務店別 件数</div></div>
       <div id="agg-koumuten"></div>
     </div>
-
     <div class="card">
       <div class="card-head"><div class="card-title">月別 件数</div></div>
       <div id="agg-month"></div>
     </div>
   </section>
 
-  <!-- ============ マスタ管理 ============ -->
+  <!-- ===== マスタ管理 ===== -->
   <section id="tab-master" style="display:none;">
     <div class="card">
       <div class="card-head"><div class="card-title">是正項目（仮）</div></div>
-      <p class="hint">明日届く本物のリストに合わせて、ここを書き換えてください。並び順は追加した順です。</p>
+      <p class="hint">本物のリストに合わせて、ここを書き換えてください。並び順は追加した順です。</p>
       <div id="m-items"></div>
       <div class="m-add">
         <input type="text" class="input" id="m-items-input" placeholder="是正項目を追加">
@@ -472,7 +397,7 @@
 "use strict";
 
 /* ===================== 状態 ===================== */
-var STORE_KEY = 'ashiba_seisei_mock_v4';
+var STORE_KEY = 'ashiba_seisei_mock_v5';
 var PALETTE = [
   'oklch(0.55 0.14 155)', 'oklch(0.72 0.13 75)',  'oklch(0.60 0.13 240)',
   'oklch(0.62 0.17 28)',  'oklch(0.58 0.13 310)', 'oklch(0.70 0.12 195)',
@@ -482,71 +407,66 @@ var PALETTE = [
 
 function defaultState() {
   return {
-    schema: 2,
+    schema: 5,
     masters: {
       items: [
-        '壁つなぎ不足・未設置',
-        '手すり・中さん不備',
-        '幅木（つま先板）未設置',
-        '筋かい・ブレース不足',
-        '足場板の隙間・固定不良',
-        '昇降設備（階段・はしご）不備',
-        'ジャッキベース・敷板不良',
-        '単管・クランプ緊結不良',
-        '建地の傾き・建入れ不良',
-        '朝顔（落下防護棚）未設置',
-        'メッシュシート未設置・破れ',
-        '開口部・すき間の養生不足',
-        '設置間隔・スパン不良',
-        'その他'
+        '壁つなぎ不足・未設置', '手すり・中さん不備', '幅木（つま先板）未設置',
+        '筋かい・ブレース不足', '足場板の隙間・固定不良', '昇降設備（階段・はしご）不備',
+        'ジャッキベース・敷板不良', '単管・クランプ緊結不良', '建地の傾き・建入れ不良',
+        '朝顔（落下防護棚）未設置', 'メッシュシート未設置・破れ', '開口部・すき間の養生不足',
+        '設置間隔・スパン不良', 'その他'
       ],
       tantou: ['担当A', '担当B', '担当C', '担当D', '担当E', '担当F'],
       koumuten: ['A工務店', 'B工務店', 'C工務店']
     },
-    records: []
+    tallies: [],
+    lastExport: null
   };
 }
 
-/* サンプル是正データ（モック用・3か月ぶん） */
-function seedRecords() {
+function seedTallies() {
   var s = [
-    ['2026-03-11','松本邸','A工務店','担当A','壁つなぎ不足・未設置',''],
-    ['2026-03-11','松本邸','A工務店','担当A','手すり・中さん不備','2階東面'],
-    ['2026-04-08','鈴木邸','B工務店','担当B','幅木（つま先板）未設置',''],
-    ['2026-04-08','鈴木邸','B工務店','担当B','壁つなぎ不足・未設置',''],
-    ['2026-04-22','高橋邸 新築','C工務店','担当C','筋かい・ブレース不足',''],
-    ['2026-05-07','高橋邸 新築','C工務店','担当C','足場板の隙間・固定不良','北側足場'],
-    ['2026-05-07','松本邸','A工務店','担当A','開口部・すき間の養生不足',''],
-    ['2026-05-12','鈴木邸','B工務店','担当B','壁つなぎ不足・未設置',''],
-    ['2026-05-14','高橋邸 新築','C工務店','担当C','昇降設備（階段・はしご）不備',''],
-    ['2026-05-16','大野邸','A工務店','担当D','メッシュシート未設置・破れ','']
+    ['2026-03-11','松本邸','A工務店','担当A','',{'壁つなぎ不足・未設置':2,'手すり・中さん不備':1}],
+    ['2026-04-08','鈴木邸','B工務店','担当B','',{'幅木（つま先板）未設置':1,'壁つなぎ不足・未設置':1}],
+    ['2026-04-22','高橋邸 新築','C工務店','担当C','北側足場',{'筋かい・ブレース不足':1,'足場板の隙間・固定不良':2}],
+    ['2026-05-07','松本邸','A工務店','担当A','',{'開口部・すき間の養生不足':1}],
+    ['2026-05-12','鈴木邸','B工務店','担当B','',{'壁つなぎ不足・未設置':1,'手すり・中さん不備':1}],
+    ['2026-05-16','大野邸','A工務店','担当D','',{'メッシュシート未設置・破れ':1,'昇降設備（階段・はしご）不備':1}]
   ];
   return s.map(function (r, i) {
-    return {
-      id: 'seed' + i, thumb: placeholderThumb(),
-      date: r[0], genba: r[1], koumuten: r[2], tantou: r[3],
-      item: r[4], memo: r[5], ai: false
-    };
+    return { id: 'seed' + i, date: r[0], genba: r[1], koumuten: r[2], tantou: r[3], memo: r[4], counts: r[5] };
   });
 }
 
 var state = loadState();
+var dirty = false;
 
 function loadState() {
   try {
     var raw = localStorage.getItem(STORE_KEY);
     if (raw) {
       var p = JSON.parse(raw);
-      if (p && p.masters && p.records) return p;
+      if (p && p.masters && p.tallies) return p;
     }
   } catch (e) {}
   var st = defaultState();
-  st.records = seedRecords();
+  st.tallies = seedTallies();
   return st;
 }
 function saveState() {
-  try { localStorage.setItem(STORE_KEY, JSON.stringify(state)); }
-  catch (e) { toast('保存できませんでした（写真が多すぎる可能性）'); }
+  try { localStorage.setItem(STORE_KEY, JSON.stringify(state)); } catch (e) {}
+  dirty = true;
+  updateSaveStatus();
+}
+function updateSaveStatus() {
+  var el = $('save-status');
+  if (dirty) {
+    el.textContent = '● 未保存の変更あり';
+    el.classList.add('dirty');
+  } else {
+    el.textContent = state.lastExport ? ('保存済 ' + state.lastExport) : '未保存';
+    el.classList.remove('dirty');
+  }
 }
 
 /* ===================== ユーティリティ ===================== */
@@ -556,10 +476,14 @@ function esc(s) {
     return { '&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;' }[c];
   });
 }
-function uid() { return 'r' + Date.now() + Math.random().toString(36).slice(2, 7); }
+function uid() { return 't' + Date.now() + Math.random().toString(36).slice(2, 7); }
 function todayStr() {
   var d = new Date();
   return d.getFullYear() + '-' + String(d.getMonth()+1).padStart(2,'0') + '-' + String(d.getDate()).padStart(2,'0');
+}
+function nowStamp() {
+  var d = new Date();
+  return (d.getMonth()+1) + '/' + d.getDate() + ' ' + String(d.getHours()).padStart(2,'0') + ':' + String(d.getMinutes()).padStart(2,'0');
 }
 function toast(msg) {
   var t = document.createElement('div');
@@ -567,43 +491,11 @@ function toast(msg) {
   document.body.appendChild(t);
   setTimeout(function () { t.remove(); }, 2600);
 }
-function placeholderThumb() {
-  var svg = "<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'>"
-    + "<rect width='100' height='100' fill='%23e8e6e1'/>"
-    + "<g stroke='%23b9c4ba' stroke-width='3' fill='none'>"
-    + "<line x1='22' y1='8' x2='22' y2='92'/><line x1='50' y1='8' x2='50' y2='92'/><line x1='78' y1='8' x2='78' y2='92'/>"
-    + "<line x1='8' y1='30' x2='92' y2='30'/><line x1='8' y1='58' x2='92' y2='58'/><line x1='8' y1='84' x2='92' y2='84'/>"
-    + "<line x1='22' y1='30' x2='50' y2='58'/></g>"
-    + "<text x='50' y='52' font-size='11' fill='%238a8a84' text-anchor='middle' font-family='sans-serif'>写真</text>"
-    + "</svg>";
-  return "data:image/svg+xml;charset=utf-8," + svg;
+function tallyTotal(t) {
+  var s = 0;
+  for (var k in t.counts) s += (t.counts[k] || 0);
+  return s;
 }
-
-/* 画像を縮小して dataURL に（localStorage 節約） */
-function fileToThumb(file) {
-  return new Promise(function (resolve) {
-    var reader = new FileReader();
-    reader.onload = function (e) {
-      var img = new Image();
-      img.onload = function () {
-        var max = 520;
-        var w = img.width, h = img.height;
-        if (w > h && w > max) { h = h * max / w; w = max; }
-        else if (h >= w && h > max) { w = w * max / h; h = max; }
-        var cv = document.createElement('canvas');
-        cv.width = w; cv.height = h;
-        cv.getContext('2d').drawImage(img, 0, 0, w, h);
-        try { resolve(cv.toDataURL('image/jpeg', 0.72)); }
-        catch (err) { resolve(e.target.result); }
-      };
-      img.onerror = function () { resolve(placeholderThumb()); };
-      img.src = e.target.result;
-    };
-    reader.onerror = function () { resolve(placeholderThumb()); };
-    reader.readAsDataURL(file);
-  });
-}
-
 function optionsHtml(arr, selected) {
   var h = '<option value="">（未設定）</option>';
   arr.forEach(function (v) {
@@ -613,14 +505,13 @@ function optionsHtml(arr, selected) {
 }
 
 /* ===================== タブ ===================== */
-var tabs = ['register', 'shukei', 'master'];
+var tabs = ['input', 'shukei', 'master'];
 function showTab(name) {
-  tabs.forEach(function (t) {
-    $('tab-' + t).style.display = (t === name) ? '' : 'none';
-  });
+  tabs.forEach(function (t) { $('tab-' + t).style.display = (t === name) ? '' : 'none'; });
   document.querySelectorAll('.seg-tab').forEach(function (b) {
     b.classList.toggle('active', b.dataset.tab === name);
   });
+  if (name === 'input') renderInput();
   if (name === 'shukei') renderShukei();
   if (name === 'master') renderMaster();
 }
@@ -628,167 +519,222 @@ document.querySelectorAll('.seg-tab').forEach(function (b) {
   b.addEventListener('click', function () { showTab(b.dataset.tab); });
 });
 
-/* ===================== 入力セット ===================== */
-function refreshSetSelects() {
-  var k = $('set-koumuten'), t = $('set-tantou');
-  var kv = k.value, tv = t.value;
-  k.innerHTML = optionsHtml(state.masters.koumuten, kv || state.masters.koumuten[0]);
-  t.innerHTML = optionsHtml(state.masters.tantou, tv);
-}
-$('set-date').value = todayStr();
+/* ===================== 入力（カウント方式） ===================== */
+var draft = newDraft();
+var editingId = null;
 
-/* ===================== 是正レコードの描画 ===================== */
-function recordCardHtml(rec) {
-  var aiTag = rec.ai ? '<span class="pill pill-ai">AI提案</span>' : '';
-  return ''
-  + '<div class="rec" data-id="' + rec.id + '">'
-  +   '<div class="rec-row">'
-  +     '<div class="rec-thumb"><img src="' + (rec.thumb || placeholderThumb()) + '" alt=""></div>'
-  +     '<div class="rec-body">'
-  +       '<div class="rec-item-row">'
-  +         '<label class="field-label">是正項目 ' + aiTag + '</label>'
-  +         '<select class="input f-item">' + optionsHtml(state.masters.items, rec.item) + '</select>'
-  +       '</div>'
-  +       '<div class="grid2">'
-  +         '<div class="full"><label class="field-label">現場名</label>'
-  +           '<input type="text" class="input f-genba" value="' + esc(rec.genba) + '" placeholder="例：松本邸"></div>'
-  +         '<div><label class="field-label">日付</label>'
-  +           '<input type="date" class="input f-date" value="' + esc(rec.date) + '"></div>'
-  +         '<div><label class="field-label">工務店</label>'
-  +           '<select class="input f-koumuten">' + optionsHtml(state.masters.koumuten, rec.koumuten) + '</select></div>'
-  +         '<div><label class="field-label">生産担当</label>'
-  +           '<select class="input f-tantou">' + optionsHtml(state.masters.tantou, rec.tantou) + '</select></div>'
-  +         '<div><label class="field-label">メモ（任意）</label>'
-  +           '<input type="text" class="input f-memo" value="' + esc(rec.memo) + '" placeholder="場所や補足"></div>'
-  +       '</div>'
-  +       '<div class="rec-foot">'
-  +         '<button class="btn btn-del btn-sm f-del">この是正を削除</button>'
-  +       '</div>'
-  +     '</div>'
-  +   '</div>'
-  + '</div>';
+function newDraft() {
+  return { date: todayStr(), genba: '', koumuten: '', tantou: '', memo: '', counts: {} };
+}
+function inputRows() {
+  var rows = state.masters.items.slice();
+  Object.keys(draft.counts).forEach(function (k) {
+    if (rows.indexOf(k) < 0) rows.push(k);
+  });
+  return rows;
+}
+function draftTotal() {
+  var s = 0;
+  for (var k in draft.counts) s += (draft.counts[k] || 0);
+  return s;
 }
 
-function renderRecords() {
-  var list = $('rec-list');
-  $('rec-count').textContent = state.records.length;
-  if (!state.records.length) {
-    list.innerHTML = '<div class="empty">まだ是正がありません。<br>上の「写真を選ぶ」から、LINEワークスのスクショをまとめて追加してください。</div>';
-    return;
+function renderInput() {
+  var rows = inputRows();
+  var counterHtml = rows.map(function (name, i) {
+    var n = draft.counts[name] || 0;
+    return '<div class="cnt-row ' + (n > 0 ? 'has' : '') + '" data-idx="' + i + '">'
+      + '<span class="cnt-name">' + esc(name) + '</span>'
+      + '<span class="cnt-ctrl">'
+      +   '<button type="button" class="cnt-btn minus" data-act="minus"' + (n <= 0 ? ' disabled' : '') + '>−</button>'
+      +   '<input type="number" class="cnt-num" inputmode="numeric" min="0" value="' + n + '">'
+      +   '<button type="button" class="cnt-btn plus" data-act="plus">＋</button>'
+      + '</span></div>';
+  }).join('');
+
+  var sorted = state.tallies.slice().sort(function (a, b) {
+    return (b.date || '').localeCompare(a.date || '') || (b.id > a.id ? 1 : -1);
+  });
+  var listHtml = sorted.length ? sorted.map(function (t) {
+    return '<div class="tl-row ' + (t.id === editingId ? 'editing' : '') + '" data-id="' + t.id + '">'
+      + '<div class="tl-main">'
+      +   '<div class="tl-genba">' + esc(t.genba || '（現場名なし）') + '</div>'
+      +   '<div class="tl-meta">' + esc(t.date || '') + '　/　' + esc(t.koumuten || '—') + '　/　' + esc(t.tantou || '—') + '</div>'
+      + '</div>'
+      + '<span class="tl-cnt num">' + tallyTotal(t) + ' 件</span>'
+      + '<button class="btn btn-del btn-sm tl-del">削除</button>'
+      + '</div>';
+  }).join('') : '<div class="empty">まだ登録がありません。<br>上で是正項目をカウントして「登録」を押してください。</div>';
+
+  $('tab-input').innerHTML =
+    '<div class="card">'
+    + '<div class="card-head"><div class="card-title">' + (editingId ? '編集中' : '今回の入力') + '</div></div>'
+    + '<div class="grid2">'
+    +   '<div class="full"><label class="field-label">現場名</label>'
+    +     '<input type="text" class="input" id="d-genba" value="' + esc(draft.genba) + '" placeholder="例：松本邸"></div>'
+    +   '<div><label class="field-label">工務店</label>'
+    +     '<select class="input" id="d-koumuten">' + optionsHtml(state.masters.koumuten, draft.koumuten) + '</select></div>'
+    +   '<div><label class="field-label">生産担当</label>'
+    +     '<select class="input" id="d-tantou">' + optionsHtml(state.masters.tantou, draft.tantou) + '</select></div>'
+    +   '<div class="full"><label class="field-label">日付</label>'
+    +     '<input type="date" class="input" id="d-date" value="' + esc(draft.date) + '"></div>'
+    +   '<div class="full"><label class="field-label">メモ（任意）</label>'
+    +     '<input type="text" class="input" id="d-memo" value="' + esc(draft.memo) + '" placeholder="補足があれば"></div>'
+    + '</div>'
+    + '</div>'
+    + '<div class="card">'
+    + '<div class="card-head"><div class="card-title">是正項目</div>'
+    +   '<span class="cnt-total">合計 <span id="d-total" class="num">' + draftTotal() + '</span> 件</span></div>'
+    + '<p class="hint">写真を見ながら、該当する項目の「＋」を押してください（数字を直接入力してもOK）。</p>'
+    + '<div id="cnt-list">' + counterHtml + '</div>'
+    + '<div class="form-actions">'
+    +   '<button class="btn btn-primary" id="btn-register">' + (editingId ? '更新する' : '登録する') + '</button>'
+    +   '<button class="btn btn-secondary" id="btn-clear">' + (editingId ? '編集をやめる' : 'クリア') + '</button>'
+    + '</div>'
+    + '</div>'
+    + '<div class="list-head"><span>登録済みの入力</span>'
+    +   '<span class="list-count num">' + state.tallies.length + '</span></div>'
+    + '<div id="tl-list">' + listHtml + '</div>';
+
+  wireInput(rows);
+}
+
+function wireInput(rows) {
+  $('d-genba').addEventListener('input', function () { draft.genba = this.value; saveState(); });
+  $('d-memo').addEventListener('input', function () { draft.memo = this.value; saveState(); });
+  $('d-date').addEventListener('change', function () { draft.date = this.value; saveState(); });
+  $('d-koumuten').addEventListener('change', function () { draft.koumuten = this.value; saveState(); });
+  $('d-tantou').addEventListener('change', function () { draft.tantou = this.value; saveState(); });
+
+  function setCount(idx, n) {
+    var name = rows[idx];
+    n = Math.max(0, n | 0);
+    if (n === 0) delete draft.counts[name]; else draft.counts[name] = n;
+    var row = document.querySelector('.cnt-row[data-idx="' + idx + '"]');
+    row.classList.toggle('has', n > 0);
+    row.querySelector('.cnt-num').value = n;
+    row.querySelector('.minus').disabled = (n <= 0);
+    $('d-total').textContent = draftTotal();
+    saveState();
   }
-  var recs = state.records.slice().reverse(); // 新しい順
-  list.innerHTML = recs.map(recordCardHtml).join('');
-  recs.forEach(function (rec) {
-    wireRecordCard(list.querySelector('.rec[data-id="' + rec.id + '"]'), rec);
+
+  document.querySelectorAll('#cnt-list .cnt-row').forEach(function (row) {
+    var idx = +row.dataset.idx;
+    var name = rows[idx];
+    row.querySelector('.plus').addEventListener('click', function () {
+      setCount(idx, (draft.counts[name] || 0) + 1);
+    });
+    row.querySelector('.minus').addEventListener('click', function () {
+      setCount(idx, (draft.counts[name] || 0) - 1);
+    });
+    row.querySelector('.cnt-num').addEventListener('change', function () {
+      setCount(idx, parseInt(this.value, 10) || 0);
+    });
+  });
+
+  $('btn-register').addEventListener('click', registerDraft);
+  $('btn-clear').addEventListener('click', function () {
+    draft = newDraft(); editingId = null; renderInput();
+  });
+
+  document.querySelectorAll('#tl-list .tl-row').forEach(function (row) {
+    var id = row.dataset.id;
+    row.querySelector('.tl-main').addEventListener('click', function () {
+      var t = state.tallies.filter(function (x) { return x.id === id; })[0];
+      if (!t) return;
+      draft = { date: t.date, genba: t.genba, koumuten: t.koumuten, tantou: t.tantou, memo: t.memo || '', counts: JSON.parse(JSON.stringify(t.counts || {})) };
+      editingId = id;
+      renderInput();
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    });
+    row.querySelector('.tl-del').addEventListener('click', function () {
+      if (!confirm('この登録を削除します。よろしいですか？')) return;
+      state.tallies = state.tallies.filter(function (x) { return x.id !== id; });
+      if (editingId === id) { draft = newDraft(); editingId = null; }
+      saveState(); renderInput();
+      toast('削除しました');
+    });
   });
 }
 
-function wireRecordCard(el, rec) {
-  if (!el) return;
-  function upd(field, val) { rec[field] = val; saveState(); }
-
-  el.querySelector('.f-item').addEventListener('change', function () {
-    rec.item = this.value; rec.ai = false; saveState();
-    var tag = el.querySelector('.pill-ai'); if (tag) tag.remove();
-  });
-  el.querySelector('.f-date').addEventListener('change', function () { upd('date', this.value); });
-  el.querySelector('.f-genba').addEventListener('input', function () { upd('genba', this.value); });
-  el.querySelector('.f-tantou').addEventListener('change', function () { upd('tantou', this.value); });
-  el.querySelector('.f-koumuten').addEventListener('change', function () { upd('koumuten', this.value); });
-  el.querySelector('.f-memo').addEventListener('input', function () { upd('memo', this.value); });
-
-  el.querySelector('.f-del').addEventListener('click', function () {
-    if (!confirm('この是正を削除します。よろしいですか？')) return;
-    state.records = state.records.filter(function (r) { return r.id !== rec.id; });
-    saveState(); renderRecords();
-    toast('削除しました');
-  });
-}
-
-/* ===================== 写真の追加 ===================== */
-function makeRecord(thumb) {
-  return {
-    id: uid(),
-    thumb: thumb || placeholderThumb(),
-    date: $('set-date').value || todayStr(),
-    genba: $('set-genba').value.trim(),
-    koumuten: $('set-koumuten').value,
-    tantou: $('set-tantou').value,
-    item: state.masters.items[Math.floor(Math.random() * state.masters.items.length)], // モックAI判定
-    memo: '',
-    ai: true
+function registerDraft() {
+  if (!draft.genba.trim()) { toast('現場名を入れてください'); return; }
+  if (draftTotal() < 1) { toast('是正項目を1つ以上カウントしてください'); return; }
+  var rec = {
+    date: draft.date, genba: draft.genba.trim(), koumuten: draft.koumuten,
+    tantou: draft.tantou, memo: draft.memo.trim(), counts: JSON.parse(JSON.stringify(draft.counts))
   };
+  if (editingId) {
+    state.tallies = state.tallies.map(function (t) {
+      return t.id === editingId ? Object.assign({ id: editingId }, rec) : t;
+    });
+    toast('更新しました');
+  } else {
+    rec.id = uid();
+    state.tallies.push(rec);
+    toast('登録しました');
+  }
+  draft = newDraft(); editingId = null;
+  saveState(); renderInput();
 }
 
-$('file-input').addEventListener('change', function () {
-  var files = Array.prototype.slice.call(this.files || []);
-  if (!files.length) return;
-  Promise.all(files.map(fileToThumb)).then(function (thumbs) {
-    thumbs.forEach(function (th) { state.records.push(makeRecord(th)); });
-    saveState(); renderRecords();
-    toast(files.length + ' 件を追加（AIが是正項目を仮提案）');
-  });
-  this.value = '';
-});
-
-$('add-blank').addEventListener('click', function () {
-  state.records.push(makeRecord(null));
-  saveState(); renderRecords();
-  toast('1 件を追加しました');
-});
-
-/* ===================== 集計：データ集計 ===================== */
+/* ===================== 集計 ===================== */
 function getFiltered() {
   var fk = $('f-koumuten').value, ft = $('f-tantou').value;
   var ff = $('f-from').value, fto = $('f-to').value;
-  return state.records.filter(function (r) {
-    if (fk && r.koumuten !== fk) return false;
-    if (ft && r.tantou !== ft) return false;
-    if (ff && (!r.date || r.date < ff)) return false;
-    if (fto && (!r.date || r.date > fto)) return false;
+  return state.tallies.filter(function (t) {
+    if (fk && t.koumuten !== fk) return false;
+    if (ft && t.tantou !== ft) return false;
+    if (ff && (!t.date || t.date < ff)) return false;
+    if (fto && (!t.date || t.date > fto)) return false;
     return true;
   });
 }
-function countBy(recs, key) {
-  var m = {};
-  recs.forEach(function (r) {
-    var k = r[key] || '（未設定）';
-    m[k] = (m[k] || 0) + 1;
-  });
-  return Object.keys(m).map(function (k) { return { name: k, n: m[k] }; })
+function sortDesc(map) {
+  return Object.keys(map).map(function (k) { return { name: k, n: map[k] }; })
     .sort(function (a, b) { return b.n - a.n; });
+}
+function aggItem(ts) {
+  var m = {};
+  ts.forEach(function (t) {
+    for (var k in t.counts) m[k] = (m[k] || 0) + (t.counts[k] || 0);
+  });
+  return sortDesc(m);
+}
+function aggKey(ts, key) {
+  var m = {};
+  ts.forEach(function (t) {
+    var k = t[key] || '（未設定）';
+    m[k] = (m[k] || 0) + tallyTotal(t);
+  });
+  return sortDesc(m);
 }
 function monthLabel(k) {
   var p = k.split('-');
-  if (p.length < 2) return k;
-  return p[0] + '年' + (+p[1]) + '月';
+  return p.length < 2 ? k : p[0] + '年' + (+p[1]) + '月';
 }
-function countByMonth(recs) {
+function aggMonth(ts) {
   var m = {};
-  recs.forEach(function (r) {
-    var k = (r.date || '').slice(0, 7) || '（日付なし）';
-    m[k] = (m[k] || 0) + 1;
+  ts.forEach(function (t) {
+    var k = (t.date || '').slice(0, 7) || '（日付なし）';
+    m[k] = (m[k] || 0) + tallyTotal(t);
   });
-  return Object.keys(m).sort().map(function (k) {
-    return { name: monthLabel(k), n: m[k] };
-  });
+  return Object.keys(m).sort().map(function (k) { return { name: monthLabel(k), n: m[k] }; });
 }
 
-/* ===================== 集計：グラフ描画 ===================== */
 function renderChart(rows, type) {
   if (!rows.length) return '<div class="chart-empty">データがありません</div>';
   var total = rows.reduce(function (s, r) { return s + r.n; }, 0);
   if (type === 'table') return tableHtml(rows, total);
-  if (type === 'pie')   return pieHtml(rows, total);
-  if (type === 'vbar')  return vbarHtml(rows);
+  if (type === 'pie') return pieHtml(rows, total);
+  if (type === 'vbar') return vbarHtml(rows);
   return hbarHtml(rows);
 }
 function hbarHtml(rows) {
   var max = Math.max.apply(null, rows.map(function (r) { return r.n; })) || 1;
   return rows.map(function (r) {
     var w = Math.round(r.n / max * 100);
-    return '<div class="bar-row">'
-      + '<span class="bar-name">' + esc(r.name) + '</span>'
+    return '<div class="bar-row"><span class="bar-name">' + esc(r.name) + '</span>'
       + '<span class="bar-track"><span class="bar-fill" style="width:' + w + '%"></span></span>'
       + '<span class="bar-cnt num">' + r.n + '</span></div>';
   }).join('');
@@ -797,8 +743,7 @@ function vbarHtml(rows) {
   var max = Math.max.apply(null, rows.map(function (r) { return r.n; })) || 1;
   return '<div class="vbar-wrap">' + rows.map(function (r, i) {
     var h = Math.max(4, Math.round(r.n / max * 140));
-    return '<div class="vbar-col">'
-      + '<div class="vbar-plot"><span class="vbar-cnt num">' + r.n + '</span>'
+    return '<div class="vbar-col"><div class="vbar-plot"><span class="vbar-cnt num">' + r.n + '</span>'
       + '<div class="vbar-bar" style="height:' + h + 'px;background:' + PALETTE[i % PALETTE.length] + '"></div></div>'
       + '<div class="vbar-name">' + esc(r.name) + '</div></div>';
   }).join('') + '</div>';
@@ -823,8 +768,7 @@ function pieHtml(rows, total) {
   }
   var legend = rows.map(function (r, i) {
     var pct = Math.round(r.n / total * 100);
-    return '<div class="lg-row">'
-      + '<span class="lg-dot" style="background:' + PALETTE[i % PALETTE.length] + '"></span>'
+    return '<div class="lg-row"><span class="lg-dot" style="background:' + PALETTE[i % PALETTE.length] + '"></span>'
       + '<span class="lg-name">' + esc(r.name) + '</span>'
       + '<span class="lg-val num">' + r.n + '件 (' + pct + '%)</span></div>';
   }).join('');
@@ -834,22 +778,18 @@ function pieHtml(rows, total) {
 function tableHtml(rows, total) {
   var body = rows.map(function (r) {
     var pct = Math.round(r.n / total * 100);
-    return '<tr><td>' + esc(r.name) + '</td><td class="num ta-r">' + r.n
-      + '</td><td class="num ta-r">' + pct + '%</td></tr>';
+    return '<tr><td>' + esc(r.name) + '</td><td class="num ta-r">' + r.n + '</td><td class="num ta-r">' + pct + '%</td></tr>';
   }).join('');
   return '<table class="agg-table"><thead><tr><th>項目</th><th class="ta-r">件数</th><th class="ta-r">割合</th></tr></thead>'
     + '<tbody>' + body + '</tbody>'
     + '<tfoot><tr><td>合計</td><td class="num ta-r">' + total + '</td><td class="ta-r">100%</td></tr></tfoot></table>';
 }
-
-/* ===================== 集計：画面 ===================== */
 function smCard(cls, num, label) {
   return '<div class="sm-card ' + cls + '"><div class="sm-num num">' + num + '</div>'
     + '<div class="sm-label">' + label + '</div></div>';
 }
 function renderShukei() {
-  var fk = $('f-koumuten'), ft = $('f-tantou');
-  var fkv = fk.value, ftv = ft.value;
+  var fk = $('f-koumuten'), ft = $('f-tantou'), fkv = fk.value, ftv = ft.value;
   fk.innerHTML = '<option value="">すべて</option>' + state.masters.koumuten.map(function (v) {
     return '<option value="' + esc(v) + '"' + (v === fkv ? ' selected' : '') + '>' + esc(v) + '</option>';
   }).join('');
@@ -857,20 +797,17 @@ function renderShukei() {
     return '<option value="' + esc(v) + '"' + (v === ftv ? ' selected' : '') + '>' + esc(v) + '</option>';
   }).join('');
 
-  var recs = getFiltered();
-  var items = countBy(recs, 'item');
-  var koumuten = countBy(recs, 'koumuten');
-  var months = countByMonth(recs);
+  var ts = getFiltered();
+  var items = aggItem(ts), koumuten = aggKey(ts, 'koumuten'), months = aggMonth(ts);
+  var total = ts.reduce(function (s, t) { return s + tallyTotal(t); }, 0);
   var genba = {};
-  recs.forEach(function (r) { if (r.genba) genba[r.genba] = 1; });
+  ts.forEach(function (t) { if (t.genba) genba[t.genba] = 1; });
   var type = $('chart-type').value;
 
-  $('summary').innerHTML = ''
-    + smCard('ink', recs.length, '是正 総件数')
+  $('summary').innerHTML = smCard('ink', total, '是正 総件数')
     + smCard('', Object.keys(genba).length, '対象 現場数')
     + smCard('', items.length, '是正項目の種類')
     + smCard('', months.length, '対象 月数');
-
   $('agg-item').innerHTML = renderChart(items, type);
   $('agg-koumuten').innerHTML = renderChart(koumuten, type);
   $('agg-month').innerHTML = renderChart(months, type);
@@ -879,7 +816,7 @@ function renderShukei() {
   if ($('f-koumuten').value) meta.push('工務店：' + $('f-koumuten').value);
   if ($('f-tantou').value) meta.push('生産担当：' + $('f-tantou').value);
   if ($('f-from').value || $('f-to').value) meta.push('期間：' + ($('f-from').value || '') + ' 〜 ' + ($('f-to').value || ''));
-  meta.push('総件数 ' + recs.length + ' 件');
+  meta.push('総件数 ' + total + ' 件');
   $('print-meta').textContent = meta.join('　／　') + '　（出力：' + todayStr() + '）';
 }
 ['f-koumuten','f-tantou','f-from','f-to','chart-type'].forEach(function (id) {
@@ -902,8 +839,7 @@ function masterRows(kind, arr) {
     return '<div class="m-row" data-kind="' + kind + '" data-i="' + i + '">'
       + '<span class="m-name">' + esc(v) + '</span>'
       + '<button class="btn btn-ghost btn-sm m-edit">修正</button>'
-      + '<button class="btn btn-del btn-sm m-del">削除</button>'
-      + '</div>';
+      + '<button class="btn btn-del btn-sm m-del">削除</button></div>';
   }).join('');
 }
 function renderMaster() {
@@ -921,20 +857,16 @@ $('tab-master').addEventListener('click', function (e) {
     } else if (e.target.classList.contains('m-del')) {
       if (confirm('「' + state.masters[kind][i] + '」を削除しますか？')) {
         state.masters[kind].splice(i, 1); saveState(); renderMaster();
-        if (kind === 'koumuten' || kind === 'tantou') refreshSetSelects();
       }
     }
     return;
   }
   var addBtn = e.target.closest('[data-add]');
   if (addBtn) {
-    var kind2 = addBtn.dataset.add;
-    var inp = $('m-' + kind2 + '-input');
-    var val = inp.value.trim();
+    var kind2 = addBtn.dataset.add, inp = $('m-' + kind2 + '-input'), val = inp.value.trim();
     if (!val) return;
     state.masters[kind2].push(val);
     inp.value = ''; saveState(); renderMaster();
-    if (kind2 === 'koumuten' || kind2 === 'tantou') refreshSetSelects();
     toast('追加しました');
   }
 });
@@ -946,13 +878,16 @@ document.querySelectorAll('.m-add .input').forEach(function (inp) {
 
 /* ===================== 保存・読込 ===================== */
 $('btn-save').addEventListener('click', function () {
+  state.lastExport = nowStamp();
   var blob = new Blob([JSON.stringify(state, null, 2)], { type: 'application/json' });
   var a = document.createElement('a');
   a.href = URL.createObjectURL(blob);
   a.download = 'ashiba_seisei_' + todayStr() + '.json';
   a.click();
   URL.revokeObjectURL(a.href);
-  toast('データを書き出しました（Documentsアプリ経由でseiun-nxへ）');
+  try { localStorage.setItem(STORE_KEY, JSON.stringify(state)); } catch (e) {}
+  dirty = false; updateSaveStatus();
+  toast('書き出しました（seiun-nxに保存してください）');
 });
 $('btn-load').addEventListener('click', function () { $('import-input').click(); });
 $('import-input').addEventListener('change', function () {
@@ -962,10 +897,13 @@ $('import-input').addEventListener('change', function () {
   rd.onload = function (e) {
     try {
       var p = JSON.parse(e.target.result);
-      if (!p.masters || !p.records) throw 0;
-      state = p; saveState();
-      refreshSetSelects(); renderRecords(); showTab('register');
-      toast('データを読み込みました');
+      if (!p.masters || !p.tallies) throw 0;
+      state = p;
+      try { localStorage.setItem(STORE_KEY, JSON.stringify(state)); } catch (er) {}
+      dirty = false; updateSaveStatus();
+      draft = newDraft(); editingId = null;
+      showTab('input');
+      toast('読み込みました');
     } catch (err) { toast('読み込めませんでした（形式が違います）'); }
   };
   rd.readAsText(f);
@@ -976,8 +914,8 @@ $('import-input').addEventListener('change', function () {
 $('banner-x').addEventListener('click', function () { $('intro-banner').style.display = 'none'; });
 
 /* ===================== 初期描画 ===================== */
-refreshSetSelects();
-renderRecords();
+updateSaveStatus();
+renderInput();
 </script>
 </body>
 </html>
