@@ -5,7 +5,6 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>足場 是正 集計（モック）</title>
 <style>
-  /* ===== ms-hub Design Tokens ===== */
   :root {
     --font: system-ui, -apple-system, "Hiragino Sans", "Hiragino Kaku Gothic ProN", "Yu Gothic", "Meiryo", sans-serif;
     --brand: oklch(0.55 0.14 155);
@@ -66,7 +65,6 @@
   }
   .num { font-variant-numeric: tabular-nums; }
 
-  /* ===== Header ===== */
   header {
     background: var(--surface); border-bottom: 1px solid var(--border);
     padding: 9px 16px; display: flex; align-items: center; justify-content: space-between;
@@ -77,17 +75,13 @@
     padding-left: 10px; border-left: 3px solid var(--brand);
     display: flex; align-items: baseline; gap: 8px;
   }
-  .brand small {
-    font-size: 10px; font-weight: 600; color: #fff; background: var(--amber);
-    padding: 2px 7px; border-radius: 100px;
-  }
+  .brand small { font-size: 10px; font-weight: 600; color: #fff; background: var(--amber); padding: 2px 7px; border-radius: 100px; }
   .header-right { display: flex; gap: 8px; align-items: center; flex-wrap: wrap; }
   .save-status { font-size: 11px; color: var(--text3); white-space: nowrap; }
   .save-status.dirty { color: var(--amber-ink); font-weight: 600; }
 
   main { max-width: 920px; margin: 0 auto; padding: 14px 16px 80px; }
 
-  /* ===== Buttons ===== */
   .btn {
     padding: 8px 14px; border-radius: 10px; font-size: 13px; font-weight: 600;
     cursor: pointer; font-family: inherit; border: none; line-height: 1.2;
@@ -103,11 +97,7 @@
   .btn-del { background: transparent; color: var(--red); padding: 6px 10px; }
   .btn-sm { padding: 6px 10px; font-size: 12px; }
 
-  /* ===== Seg tabs ===== */
-  .seg-tabs {
-    display: flex; gap: 6px; padding: 4px; background: var(--surface2);
-    border-radius: 12px; margin-bottom: 14px;
-  }
+  .seg-tabs { display: flex; gap: 6px; padding: 4px; background: var(--surface2); border-radius: 12px; margin-bottom: 14px; }
   .seg-tab {
     flex: 1; padding: 9px 8px; text-align: center; font-size: 13px; font-weight: 600;
     color: var(--text2); background: transparent; border: none; border-radius: 8px;
@@ -115,20 +105,14 @@
   }
   .seg-tab.active { background: var(--surface); color: var(--brand); box-shadow: var(--shadow-sm); }
 
-  /* ===== Card ===== */
-  .card {
-    background: var(--surface); border: 1.5px solid var(--border);
-    border-radius: 14px; padding: 14px 16px; margin-bottom: 12px;
-  }
+  .card { background: var(--surface); border: 1.5px solid var(--border); border-radius: 14px; padding: 14px 16px; margin-bottom: 12px; }
   .card-head {
-    display: flex; align-items: center; gap: 8px;
-    padding: 2px 0 10px 10px; margin-bottom: 12px;
+    display: flex; align-items: center; gap: 8px; padding: 2px 0 10px 10px; margin-bottom: 12px;
     border-bottom: 1px solid var(--line); border-left: 3px solid var(--brand);
   }
   .card-title { font-size: 15px; font-weight: 700; color: var(--ink); flex: 1; letter-spacing: -0.01em; }
   .hint { font-size: 12px; color: var(--text2); line-height: 1.6; margin-bottom: 10px; }
 
-  /* ===== Inputs ===== */
   .field-label { display: block; font-size: 11px; font-weight: 600; color: var(--text2); margin-bottom: 4px; }
   .input {
     width: 100%; border: none; background: var(--surface2); border-radius: 9px;
@@ -144,7 +128,6 @@
   .grid2 > * { min-width: 0; }
   .grid2 .full { grid-column: 1 / -1; }
 
-  /* ===== Banner ===== */
   .banner {
     background: var(--amber-l); border: 1px solid oklch(0.88 0.10 85);
     border-radius: 12px; padding: 10px 14px; margin-bottom: 14px;
@@ -154,21 +137,17 @@
   .banner b { font-weight: 700; }
   .banner .x { margin-left: auto; cursor: pointer; font-size: 16px; line-height: 1; padding: 0 4px; flex-shrink: 0; }
 
-  /* ===== Counter list ===== */
+  /* counter */
   .cnt-total { font-size: 13px; font-weight: 700; color: var(--brand); }
-  .cnt-row {
-    display: flex; align-items: center; gap: 10px;
-    padding: 8px 6px; border-top: 1px solid var(--border); border-radius: 8px;
-  }
+  .cnt-row { display: flex; align-items: center; gap: 10px; padding: 8px 6px; border-top: 1px solid var(--border); border-radius: 8px; }
   .cnt-row:first-child { border-top: none; }
   .cnt-row.has { background: var(--brand-softer); }
   .cnt-name { flex: 1; font-size: 13px; line-height: 1.35; }
   .cnt-ctrl { display: flex; align-items: center; gap: 7px; flex-shrink: 0; }
   .cnt-btn {
-    width: 38px; height: 38px; border-radius: 10px; border: none;
-    background: var(--surface2); color: var(--ink); font-size: 21px; font-weight: 700;
-    cursor: pointer; display: flex; align-items: center; justify-content: center;
-    line-height: 1; font-family: inherit; transition: transform .06s;
+    width: 38px; height: 38px; border-radius: 10px; border: none; background: var(--surface2);
+    color: var(--ink); font-size: 21px; font-weight: 700; cursor: pointer;
+    display: flex; align-items: center; justify-content: center; line-height: 1; font-family: inherit; transition: transform .06s;
   }
   .cnt-btn:active:not(:disabled) { transform: scale(0.9); }
   .cnt-btn.plus { background: var(--brand); color: #fff; }
@@ -180,30 +159,30 @@
   }
   .cnt-num:focus { outline: none; box-shadow: inset 0 0 0 1px var(--border2); }
   .cnt-row.has .cnt-num { color: var(--brand); }
-
   .form-actions { display: flex; gap: 8px; margin-top: 4px; }
 
-  /* ===== Saved tally list ===== */
-  .list-head {
-    display: flex; align-items: center; gap: 8px;
-    margin: 16px 2px 8px; font-size: 12px; font-weight: 700; color: var(--text2);
-  }
+  /* saved tally accordion */
+  .list-head { display: flex; align-items: center; gap: 8px; margin: 16px 2px 8px; font-size: 12px; font-weight: 700; color: var(--text2); }
   .list-count { font-size: 11px; font-weight: 700; color: #fff; background: var(--text3); border-radius: 100px; padding: 1px 8px; }
-  .tl-row {
-    display: flex; align-items: center; gap: 10px; padding: 10px 12px;
-    border: 1.5px solid var(--border); border-radius: 12px; margin-bottom: 8px; background: var(--surface);
-  }
-  .tl-row.editing { border-color: var(--brand); background: var(--brand-softer); }
-  .tl-main { flex: 1; min-width: 0; cursor: pointer; }
+  .tl-card { border: 1.5px solid var(--border); border-radius: 12px; margin-bottom: 8px; background: var(--surface); overflow: hidden; }
+  .tl-card.open { border-color: var(--brand-line); }
+  .tl-row { display: flex; align-items: center; gap: 10px; padding: 10px 12px; cursor: pointer; }
+  .tl-main { flex: 1; min-width: 0; }
   .tl-genba { font-size: 13px; font-weight: 700; }
   .tl-meta { font-size: 11px; color: var(--text2); margin-top: 2px; }
   .tl-cnt { font-size: 12px; font-weight: 700; color: #fff; background: var(--brand); border-radius: 100px; padding: 2px 9px; flex-shrink: 0; }
-  .empty {
-    padding: 36px 20px; text-align: center; color: var(--text3); line-height: 1.9;
-    font-size: 13px; border: 1.5px dashed var(--border2); border-radius: 14px;
-  }
+  .tl-caret { color: var(--text3); font-size: 10px; transition: transform .15s; flex-shrink: 0; }
+  .tl-card.open .tl-caret { transform: rotate(180deg); }
+  .tl-detail { display: none; padding: 0 12px 12px; }
+  .tl-card.open .tl-detail { display: block; }
+  .tl-bd-row { display: flex; justify-content: space-between; gap: 10px; font-size: 12px; padding: 5px 8px; border-top: 1px solid var(--border); }
+  .tl-bd-row:first-child { border-top: none; }
+  .tl-bd-row .n { font-weight: 700; color: var(--brand); flex-shrink: 0; }
+  .tl-extra { font-size: 11px; color: var(--text2); margin-top: 8px; line-height: 1.6; }
+  .tl-actions { display: flex; gap: 8px; margin-top: 10px; }
+  .empty { padding: 36px 20px; text-align: center; color: var(--text3); line-height: 1.9; font-size: 13px; border: 1.5px dashed var(--border2); border-radius: 14px; }
 
-  /* ===== 集計 ===== */
+  /* 集計 */
   .summary { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; margin-bottom: 14px; }
   .sm-card { background: var(--surface); border: 1.5px solid var(--border); border-radius: 12px; padding: 12px 10px; text-align: center; }
   .sm-num { font-size: 26px; font-weight: 700; line-height: 1; color: var(--brand); }
@@ -239,7 +218,6 @@
   .agg-table tfoot td { font-weight: 700; border-top: 1.5px solid var(--border2); }
   .chart-empty { padding: 26px 14px; color: var(--text3); font-size: 13px; text-align: center; }
 
-  /* ===== master ===== */
   .m-row { display: flex; align-items: center; gap: 8px; padding: 9px 12px; border-top: 1px solid var(--border); }
   .m-row:first-of-type { border-top: none; }
   .m-name { flex: 1; font-size: 13px; }
@@ -254,22 +232,36 @@
   @keyframes tin { from { opacity: 0; transform: translate(-50%, 8px); } to { opacity: 1; transform: translate(-50%, 0); } }
 
   .print-only { display: none; }
+  .print-2col > .card:last-child { margin-bottom: 12px; }
   @media (max-width: 560px) {
     .summary { grid-template-columns: repeat(2, 1fr); }
     .bar-name { width: 104px; }
   }
+
+  /* ===== Print: A4 1枚を目標にコンパクト ===== */
   @media print {
-    @page { margin: 14mm; }
-    body { background: #fff; }
+    @page { size: A4; margin: 11mm; }
+    body { background: #fff; font-size: 11px; }
     header, .seg-tabs, .no-print, #tab-input, #tab-master { display: none !important; }
     main { max-width: none; padding: 0; }
     #tab-shukei { display: block !important; }
     .print-only { display: block; }
-    .print-head { margin-bottom: 14px; padding-bottom: 8px; border-bottom: 2px solid var(--ink); }
-    .print-title { font-size: 18px; font-weight: 700; }
-    .print-sub { font-size: 12px; color: var(--text2); margin-top: 4px; }
-    .card, .sm-card { break-inside: avoid; }
-    .bar-track { border: 1px solid var(--border2); }
+    .print-head { margin-bottom: 8px; padding-bottom: 5px; border-bottom: 2px solid var(--ink); }
+    .print-title { font-size: 15px; font-weight: 700; }
+    .print-sub { font-size: 10px; color: var(--text2); margin-top: 2px; }
+    .card { border: 1px solid var(--border2); border-radius: 8px; padding: 6px 10px; margin-bottom: 7px; break-inside: avoid; }
+    .card-head { padding: 0 0 4px 8px; margin-bottom: 5px; }
+    .card-title { font-size: 12px; }
+    .summary { gap: 5px; margin-bottom: 7px; }
+    .sm-card { padding: 5px 4px; border: 1px solid var(--border2); }
+    .sm-num { font-size: 17px; }
+    .sm-label { font-size: 9px; margin-top: 2px; }
+    .bar-row { padding: 2.5px 6px; }
+    .bar-name { font-size: 9px; width: 128px; }
+    .bar-track { height: 11px; border: 1px solid var(--border2); }
+    .bar-cnt { font-size: 10px; width: 26px; }
+    .print-2col { display: flex; gap: 8px; }
+    .print-2col > .card { flex: 1; margin-bottom: 0 !important; }
   }
 </style>
 </head>
@@ -290,9 +282,10 @@
   <div class="banner" id="intro-banner">
     <div>
       <b>これは試作（モック）です。</b><br>
-      是正項目・工務店・生産担当は <b>仮の名前</b> です（「マスタ管理」タブで実際の名前に書き換えてください）。
-      使い方：LINEワークスで是正写真を見ながら、是正項目を「＋」していき、最後に「登録」。
-      「データ書き出し」でファイルを保存すれば、PC・スマホ・タブレットで共有できます（seiun-nx想定）。
+      是正項目・工務店・生産担当・足場業者は <b>仮の名前</b> です（「マスタ管理」タブで実際の名前に書き換え）。
+      使い方：LINEワークスで写真を見ながら是正項目を「＋」→「登録」。
+      <b>【大切】</b>作業が終わったら必ず「データ書き出し」でファイルを保存し、seiun-nx に置いてください
+      （端末内のデータは消えることがあります。保管場所は seiun-nx のファイルです）。
     </div>
     <span class="x" id="banner-x" title="閉じる">×</span>
   </div>
@@ -317,6 +310,10 @@
         <button class="btn btn-primary btn-sm" id="btn-pdf">PDF出力</button>
       </div>
       <div class="grid2">
+        <div id="f-gyosha-wrap">
+          <label class="field-label">足場業者でしぼり込み</label>
+          <select class="input" id="f-gyosha"><option value="">すべて</option></select>
+        </div>
         <div>
           <label class="field-label">工務店でしぼり込み</label>
           <select class="input" id="f-koumuten"><option value="">すべて</option></select>
@@ -352,13 +349,19 @@
       <div class="card-head"><div class="card-title">是正項目別 件数</div></div>
       <div id="agg-item"></div>
     </div>
-    <div class="card">
-      <div class="card-head"><div class="card-title">工務店別 件数</div></div>
-      <div id="agg-koumuten"></div>
+    <div class="card" id="card-gyosha" style="display:none;">
+      <div class="card-head"><div class="card-title">足場業者別 件数</div></div>
+      <div id="agg-gyosha"></div>
     </div>
-    <div class="card">
-      <div class="card-head"><div class="card-title">月別 件数</div></div>
-      <div id="agg-month"></div>
+    <div class="print-2col">
+      <div class="card">
+        <div class="card-head"><div class="card-title">工務店別 件数</div></div>
+        <div id="agg-koumuten"></div>
+      </div>
+      <div class="card">
+        <div class="card-head"><div class="card-title">月別 件数</div></div>
+        <div id="agg-month"></div>
+      </div>
     </div>
   </section>
 
@@ -374,11 +377,12 @@
       </div>
     </div>
     <div class="card">
-      <div class="card-head"><div class="card-title">生産担当</div></div>
-      <div id="m-tantou"></div>
+      <div class="card-head"><div class="card-title">足場業者</div></div>
+      <p class="hint">業者が増えたらここに追加。2社以上になると、集計に「足場業者別」が自動で表示されます。</p>
+      <div id="m-gyosha"></div>
       <div class="m-add">
-        <input type="text" class="input" id="m-tantou-input" placeholder="生産担当を追加">
-        <button class="btn btn-primary btn-sm" data-add="tantou">追加</button>
+        <input type="text" class="input" id="m-gyosha-input" placeholder="足場業者を追加">
+        <button class="btn btn-primary btn-sm" data-add="gyosha">追加</button>
       </div>
     </div>
     <div class="card">
@@ -389,6 +393,14 @@
         <button class="btn btn-primary btn-sm" data-add="koumuten">追加</button>
       </div>
     </div>
+    <div class="card">
+      <div class="card-head"><div class="card-title">生産担当</div></div>
+      <div id="m-tantou"></div>
+      <div class="m-add">
+        <input type="text" class="input" id="m-tantou-input" placeholder="生産担当を追加">
+        <button class="btn btn-primary btn-sm" data-add="tantou">追加</button>
+      </div>
+    </div>
   </section>
 
 </main>
@@ -396,8 +408,7 @@
 <script>
 "use strict";
 
-/* ===================== 状態 ===================== */
-var STORE_KEY = 'ashiba_seisei_mock_v5';
+var STORE_KEY = 'ashiba_seisei_mock_v6';
 var PALETTE = [
   'oklch(0.55 0.14 155)', 'oklch(0.72 0.13 75)',  'oklch(0.60 0.13 240)',
   'oklch(0.62 0.17 28)',  'oklch(0.58 0.13 310)', 'oklch(0.70 0.12 195)',
@@ -407,7 +418,7 @@ var PALETTE = [
 
 function defaultState() {
   return {
-    schema: 5,
+    schema: 6,
     masters: {
       items: [
         '壁つなぎ不足・未設置', '手すり・中さん不備', '幅木（つま先板）未設置',
@@ -416,8 +427,9 @@ function defaultState() {
         '朝顔（落下防護棚）未設置', 'メッシュシート未設置・破れ', '開口部・すき間の養生不足',
         '設置間隔・スパン不良', 'その他'
       ],
-      tantou: ['担当A', '担当B', '担当C', '担当D', '担当E', '担当F'],
-      koumuten: ['A工務店', 'B工務店', 'C工務店']
+      gyosha: ['足場業者A'],
+      koumuten: ['A工務店', 'B工務店', 'C工務店'],
+      tantou: ['担当A', '担当B', '担当C', '担当D', '担当E', '担当F']
     },
     tallies: [],
     lastExport: null
@@ -434,7 +446,8 @@ function seedTallies() {
     ['2026-05-16','大野邸','A工務店','担当D','',{'メッシュシート未設置・破れ':1,'昇降設備（階段・はしご）不備':1}]
   ];
   return s.map(function (r, i) {
-    return { id: 'seed' + i, date: r[0], genba: r[1], koumuten: r[2], tantou: r[3], memo: r[4], counts: r[5] };
+    return { id: 'seed' + i, date: r[0], genba: r[1], koumuten: r[2], tantou: r[3],
+             gyosha: '足場業者A', memo: r[4], counts: r[5], updatedAt: '' };
   });
 }
 
@@ -460,16 +473,10 @@ function saveState() {
 }
 function updateSaveStatus() {
   var el = $('save-status');
-  if (dirty) {
-    el.textContent = '● 未保存の変更あり';
-    el.classList.add('dirty');
-  } else {
-    el.textContent = state.lastExport ? ('保存済 ' + state.lastExport) : '未保存';
-    el.classList.remove('dirty');
-  }
+  if (dirty) { el.textContent = '● 未保存の変更あり'; el.classList.add('dirty'); }
+  else { el.textContent = state.lastExport ? ('保存済 ' + state.lastExport) : '未保存'; el.classList.remove('dirty'); }
 }
 
-/* ===================== ユーティリティ ===================== */
 function $(id) { return document.getElementById(id); }
 function esc(s) {
   return String(s == null ? '' : s).replace(/[&<>"']/g, function (c) {
@@ -504,13 +511,11 @@ function optionsHtml(arr, selected) {
   return h;
 }
 
-/* ===================== タブ ===================== */
+/* ===== タブ ===== */
 var tabs = ['input', 'shukei', 'master'];
 function showTab(name) {
   tabs.forEach(function (t) { $('tab-' + t).style.display = (t === name) ? '' : 'none'; });
-  document.querySelectorAll('.seg-tab').forEach(function (b) {
-    b.classList.toggle('active', b.dataset.tab === name);
-  });
+  document.querySelectorAll('.seg-tab').forEach(function (b) { b.classList.toggle('active', b.dataset.tab === name); });
   if (name === 'input') renderInput();
   if (name === 'shukei') renderShukei();
   if (name === 'master') renderMaster();
@@ -519,18 +524,18 @@ document.querySelectorAll('.seg-tab').forEach(function (b) {
   b.addEventListener('click', function () { showTab(b.dataset.tab); });
 });
 
-/* ===================== 入力（カウント方式） ===================== */
+/* ===== 入力（カウント方式） ===== */
 var draft = newDraft();
 var editingId = null;
+var expandedId = null;
 
 function newDraft() {
-  return { date: todayStr(), genba: '', koumuten: '', tantou: '', memo: '', counts: {} };
+  var g = state.masters.gyosha.length === 1 ? state.masters.gyosha[0] : '';
+  return { date: todayStr(), genba: '', koumuten: '', tantou: '', gyosha: g, memo: '', counts: {} };
 }
 function inputRows() {
   var rows = state.masters.items.slice();
-  Object.keys(draft.counts).forEach(function (k) {
-    if (rows.indexOf(k) < 0) rows.push(k);
-  });
+  Object.keys(draft.counts).forEach(function (k) { if (rows.indexOf(k) < 0) rows.push(k); });
   return rows;
 }
 function draftTotal() {
@@ -541,6 +546,8 @@ function draftTotal() {
 
 function renderInput() {
   var rows = inputRows();
+  var showGyosha = state.masters.gyosha.length >= 2;
+
   var counterHtml = rows.map(function (name, i) {
     var n = draft.counts[name] || 0;
     return '<div class="cnt-row ' + (n > 0 ? 'has' : '') + '" data-idx="' + i + '">'
@@ -552,36 +559,63 @@ function renderInput() {
       + '</span></div>';
   }).join('');
 
+  var genbaList = {};
+  state.tallies.forEach(function (t) { if (t.genba) genbaList[t.genba] = 1; });
+  var datalist = '<datalist id="genba-suggest">'
+    + Object.keys(genbaList).map(function (g) { return '<option value="' + esc(g) + '">'; }).join('') + '</datalist>';
+
+  var formGrid =
+    '<div class="full"><label class="field-label">現場名</label>'
+    + '<input type="text" class="input" id="d-genba" list="genba-suggest" value="' + esc(draft.genba) + '" placeholder="例：松本邸"></div>'
+    + datalist
+    + '<div><label class="field-label">工務店</label>'
+    +   '<select class="input" id="d-koumuten">' + optionsHtml(state.masters.koumuten, draft.koumuten) + '</select></div>'
+    + '<div><label class="field-label">生産担当</label>'
+    +   '<select class="input" id="d-tantou">' + optionsHtml(state.masters.tantou, draft.tantou) + '</select></div>'
+    + (showGyosha
+        ? '<div><label class="field-label">足場業者</label>'
+          + '<select class="input" id="d-gyosha">' + optionsHtml(state.masters.gyosha, draft.gyosha) + '</select></div>'
+          + '<div><label class="field-label">日付</label>'
+          + '<input type="date" class="input" id="d-date" value="' + esc(draft.date) + '"></div>'
+        : '<div class="full"><label class="field-label">日付</label>'
+          + '<input type="date" class="input" id="d-date" value="' + esc(draft.date) + '"></div>')
+    + '<div class="full"><label class="field-label">メモ（任意）</label>'
+    +   '<input type="text" class="input" id="d-memo" value="' + esc(draft.memo) + '" placeholder="補足があれば"></div>';
+
   var sorted = state.tallies.slice().sort(function (a, b) {
     return (b.date || '').localeCompare(a.date || '') || (b.id > a.id ? 1 : -1);
   });
   var listHtml = sorted.length ? sorted.map(function (t) {
-    return '<div class="tl-row ' + (t.id === editingId ? 'editing' : '') + '" data-id="' + t.id + '">'
-      + '<div class="tl-main">'
-      +   '<div class="tl-genba">' + esc(t.genba || '（現場名なし）') + '</div>'
-      +   '<div class="tl-meta">' + esc(t.date || '') + '　/　' + esc(t.koumuten || '—') + '　/　' + esc(t.tantou || '—') + '</div>'
+    var bd = Object.keys(t.counts).map(function (k) { return { k: k, n: t.counts[k] }; })
+      .sort(function (a, b) { return b.n - a.n; });
+    var bdHtml = bd.map(function (r) {
+      return '<div class="tl-bd-row"><span>' + esc(r.k) + '</span><span class="n num">' + r.n + ' 件</span></div>';
+    }).join('');
+    var extra = [];
+    if (showGyosha && t.gyosha) extra.push('足場業者：' + esc(t.gyosha));
+    if (t.memo) extra.push('メモ：' + esc(t.memo));
+    if (t.updatedAt) extra.push('入力：' + esc(t.updatedAt));
+    return '<div class="tl-card ' + (t.id === expandedId ? 'open' : '') + '" data-id="' + t.id + '">'
+      + '<div class="tl-row tl-toggle">'
+      +   '<div class="tl-main"><div class="tl-genba">' + esc(t.genba || '（現場名なし）') + '</div>'
+      +     '<div class="tl-meta">' + esc(t.date || '') + '　/　' + esc(t.koumuten || '—') + '　/　' + esc(t.tantou || '—') + '</div></div>'
+      +   '<span class="tl-cnt num">' + tallyTotal(t) + ' 件</span>'
+      +   '<span class="tl-caret">▼</span>'
       + '</div>'
-      + '<span class="tl-cnt num">' + tallyTotal(t) + ' 件</span>'
-      + '<button class="btn btn-del btn-sm tl-del">削除</button>'
-      + '</div>';
+      + '<div class="tl-detail">'
+      +   bdHtml
+      +   (extra.length ? '<div class="tl-extra">' + extra.join('<br>') + '</div>' : '')
+      +   '<div class="tl-actions">'
+      +     '<button class="btn btn-secondary btn-sm tl-edit">編集する</button>'
+      +     '<button class="btn btn-del btn-sm tl-del">削除</button>'
+      +   '</div>'
+      + '</div></div>';
   }).join('') : '<div class="empty">まだ登録がありません。<br>上で是正項目をカウントして「登録」を押してください。</div>';
 
   $('tab-input').innerHTML =
     '<div class="card">'
     + '<div class="card-head"><div class="card-title">' + (editingId ? '編集中' : '今回の入力') + '</div></div>'
-    + '<div class="grid2">'
-    +   '<div class="full"><label class="field-label">現場名</label>'
-    +     '<input type="text" class="input" id="d-genba" value="' + esc(draft.genba) + '" placeholder="例：松本邸"></div>'
-    +   '<div><label class="field-label">工務店</label>'
-    +     '<select class="input" id="d-koumuten">' + optionsHtml(state.masters.koumuten, draft.koumuten) + '</select></div>'
-    +   '<div><label class="field-label">生産担当</label>'
-    +     '<select class="input" id="d-tantou">' + optionsHtml(state.masters.tantou, draft.tantou) + '</select></div>'
-    +   '<div class="full"><label class="field-label">日付</label>'
-    +     '<input type="date" class="input" id="d-date" value="' + esc(draft.date) + '"></div>'
-    +   '<div class="full"><label class="field-label">メモ（任意）</label>'
-    +     '<input type="text" class="input" id="d-memo" value="' + esc(draft.memo) + '" placeholder="補足があれば"></div>'
-    + '</div>'
-    + '</div>'
+    + '<div class="grid2">' + formGrid + '</div></div>'
     + '<div class="card">'
     + '<div class="card-head"><div class="card-title">是正項目</div>'
     +   '<span class="cnt-total">合計 <span id="d-total" class="num">' + draftTotal() + '</span> 件</span></div>'
@@ -590,21 +624,22 @@ function renderInput() {
     + '<div class="form-actions">'
     +   '<button class="btn btn-primary" id="btn-register">' + (editingId ? '更新する' : '登録する') + '</button>'
     +   '<button class="btn btn-secondary" id="btn-clear">' + (editingId ? '編集をやめる' : 'クリア') + '</button>'
-    + '</div>'
-    + '</div>'
+    + '</div></div>'
     + '<div class="list-head"><span>登録済みの入力</span>'
-    +   '<span class="list-count num">' + state.tallies.length + '</span></div>'
+    +   '<span class="list-count num">' + state.tallies.length + '</span>'
+    +   '<span style="font-weight:400;color:var(--text3);">タップで内容を表示</span></div>'
     + '<div id="tl-list">' + listHtml + '</div>';
 
-  wireInput(rows);
+  wireInput(rows, showGyosha);
 }
 
-function wireInput(rows) {
+function wireInput(rows, showGyosha) {
   $('d-genba').addEventListener('input', function () { draft.genba = this.value; saveState(); });
   $('d-memo').addEventListener('input', function () { draft.memo = this.value; saveState(); });
   $('d-date').addEventListener('change', function () { draft.date = this.value; saveState(); });
   $('d-koumuten').addEventListener('change', function () { draft.koumuten = this.value; saveState(); });
   $('d-tantou').addEventListener('change', function () { draft.tantou = this.value; saveState(); });
+  if (showGyosha) $('d-gyosha').addEventListener('change', function () { draft.gyosha = this.value; saveState(); });
 
   function setCount(idx, n) {
     var name = rows[idx];
@@ -617,40 +652,36 @@ function wireInput(rows) {
     $('d-total').textContent = draftTotal();
     saveState();
   }
-
   document.querySelectorAll('#cnt-list .cnt-row').forEach(function (row) {
-    var idx = +row.dataset.idx;
-    var name = rows[idx];
-    row.querySelector('.plus').addEventListener('click', function () {
-      setCount(idx, (draft.counts[name] || 0) + 1);
-    });
-    row.querySelector('.minus').addEventListener('click', function () {
-      setCount(idx, (draft.counts[name] || 0) - 1);
-    });
-    row.querySelector('.cnt-num').addEventListener('change', function () {
-      setCount(idx, parseInt(this.value, 10) || 0);
-    });
+    var idx = +row.dataset.idx, name = rows[idx];
+    row.querySelector('.plus').addEventListener('click', function () { setCount(idx, (draft.counts[name] || 0) + 1); });
+    row.querySelector('.minus').addEventListener('click', function () { setCount(idx, (draft.counts[name] || 0) - 1); });
+    row.querySelector('.cnt-num').addEventListener('change', function () { setCount(idx, parseInt(this.value, 10) || 0); });
   });
 
   $('btn-register').addEventListener('click', registerDraft);
-  $('btn-clear').addEventListener('click', function () {
-    draft = newDraft(); editingId = null; renderInput();
-  });
+  $('btn-clear').addEventListener('click', function () { draft = newDraft(); editingId = null; renderInput(); });
 
-  document.querySelectorAll('#tl-list .tl-row').forEach(function (row) {
-    var id = row.dataset.id;
-    row.querySelector('.tl-main').addEventListener('click', function () {
+  document.querySelectorAll('#tl-list .tl-card').forEach(function (card) {
+    var id = card.dataset.id;
+    card.querySelector('.tl-toggle').addEventListener('click', function () {
+      expandedId = (expandedId === id) ? null : id;
+      renderInput();
+    });
+    card.querySelector('.tl-edit').addEventListener('click', function () {
       var t = state.tallies.filter(function (x) { return x.id === id; })[0];
       if (!t) return;
-      draft = { date: t.date, genba: t.genba, koumuten: t.koumuten, tantou: t.tantou, memo: t.memo || '', counts: JSON.parse(JSON.stringify(t.counts || {})) };
-      editingId = id;
+      draft = { date: t.date, genba: t.genba, koumuten: t.koumuten, tantou: t.tantou,
+                gyosha: t.gyosha || '', memo: t.memo || '', counts: JSON.parse(JSON.stringify(t.counts || {})) };
+      editingId = id; expandedId = null;
       renderInput();
       window.scrollTo({ top: 0, behavior: 'smooth' });
     });
-    row.querySelector('.tl-del').addEventListener('click', function () {
+    card.querySelector('.tl-del').addEventListener('click', function () {
       if (!confirm('この登録を削除します。よろしいですか？')) return;
       state.tallies = state.tallies.filter(function (x) { return x.id !== id; });
       if (editingId === id) { draft = newDraft(); editingId = null; }
+      expandedId = null;
       saveState(); renderInput();
       toast('削除しました');
     });
@@ -660,29 +691,31 @@ function wireInput(rows) {
 function registerDraft() {
   if (!draft.genba.trim()) { toast('現場名を入れてください'); return; }
   if (draftTotal() < 1) { toast('是正項目を1つ以上カウントしてください'); return; }
+  var g = draft.gyosha || (state.masters.gyosha.length === 1 ? state.masters.gyosha[0] : '');
   var rec = {
-    date: draft.date, genba: draft.genba.trim(), koumuten: draft.koumuten,
-    tantou: draft.tantou, memo: draft.memo.trim(), counts: JSON.parse(JSON.stringify(draft.counts))
+    date: draft.date, genba: draft.genba.trim(), koumuten: draft.koumuten, tantou: draft.tantou,
+    gyosha: g, memo: draft.memo.trim(), counts: JSON.parse(JSON.stringify(draft.counts)), updatedAt: nowStamp()
   };
   if (editingId) {
-    state.tallies = state.tallies.map(function (t) {
-      return t.id === editingId ? Object.assign({ id: editingId }, rec) : t;
-    });
+    state.tallies = state.tallies.map(function (t) { return t.id === editingId ? Object.assign({ id: editingId }, rec) : t; });
     toast('更新しました');
   } else {
     rec.id = uid();
     state.tallies.push(rec);
     toast('登録しました');
   }
-  draft = newDraft(); editingId = null;
+  draft = newDraft(); editingId = null; expandedId = null;
   saveState(); renderInput();
 }
 
-/* ===================== 集計 ===================== */
+/* ===== 集計 ===== */
+var printMode = false;
+
 function getFiltered() {
-  var fk = $('f-koumuten').value, ft = $('f-tantou').value;
+  var fg = $('f-gyosha').value, fk = $('f-koumuten').value, ft = $('f-tantou').value;
   var ff = $('f-from').value, fto = $('f-to').value;
   return state.tallies.filter(function (t) {
+    if (fg && t.gyosha !== fg) return false;
     if (fk && t.koumuten !== fk) return false;
     if (ft && t.tantou !== ft) return false;
     if (ff && (!t.date || t.date < ff)) return false;
@@ -696,29 +729,18 @@ function sortDesc(map) {
 }
 function aggItem(ts) {
   var m = {};
-  ts.forEach(function (t) {
-    for (var k in t.counts) m[k] = (m[k] || 0) + (t.counts[k] || 0);
-  });
+  ts.forEach(function (t) { for (var k in t.counts) m[k] = (m[k] || 0) + (t.counts[k] || 0); });
   return sortDesc(m);
 }
 function aggKey(ts, key) {
   var m = {};
-  ts.forEach(function (t) {
-    var k = t[key] || '（未設定）';
-    m[k] = (m[k] || 0) + tallyTotal(t);
-  });
+  ts.forEach(function (t) { var k = t[key] || '（未設定）'; m[k] = (m[k] || 0) + tallyTotal(t); });
   return sortDesc(m);
 }
-function monthLabel(k) {
-  var p = k.split('-');
-  return p.length < 2 ? k : p[0] + '年' + (+p[1]) + '月';
-}
+function monthLabel(k) { var p = k.split('-'); return p.length < 2 ? k : p[0] + '年' + (+p[1]) + '月'; }
 function aggMonth(ts) {
   var m = {};
-  ts.forEach(function (t) {
-    var k = (t.date || '').slice(0, 7) || '（日付なし）';
-    m[k] = (m[k] || 0) + tallyTotal(t);
-  });
+  ts.forEach(function (t) { var k = (t.date || '').slice(0, 7) || '（日付なし）'; m[k] = (m[k] || 0) + tallyTotal(t); });
   return Object.keys(m).sort().map(function (k) { return { name: monthLabel(k), n: m[k] }; });
 }
 
@@ -785,24 +807,29 @@ function tableHtml(rows, total) {
     + '<tfoot><tr><td>合計</td><td class="num ta-r">' + total + '</td><td class="ta-r">100%</td></tr></tfoot></table>';
 }
 function smCard(cls, num, label) {
-  return '<div class="sm-card ' + cls + '"><div class="sm-num num">' + num + '</div>'
-    + '<div class="sm-label">' + label + '</div></div>';
+  return '<div class="sm-card ' + cls + '"><div class="sm-num num">' + num + '</div><div class="sm-label">' + label + '</div></div>';
 }
 function renderShukei() {
-  var fk = $('f-koumuten'), ft = $('f-tantou'), fkv = fk.value, ftv = ft.value;
-  fk.innerHTML = '<option value="">すべて</option>' + state.masters.koumuten.map(function (v) {
-    return '<option value="' + esc(v) + '"' + (v === fkv ? ' selected' : '') + '>' + esc(v) + '</option>';
-  }).join('');
-  ft.innerHTML = '<option value="">すべて</option>' + state.masters.tantou.map(function (v) {
-    return '<option value="' + esc(v) + '"' + (v === ftv ? ' selected' : '') + '>' + esc(v) + '</option>';
-  }).join('');
+  var showGyosha = state.masters.gyosha.length >= 2;
+  $('f-gyosha-wrap').style.display = showGyosha ? '' : 'none';
+  $('card-gyosha').style.display = showGyosha ? '' : 'none';
+
+  function fillFilter(el, arr) {
+    var cur = el.value;
+    el.innerHTML = '<option value="">すべて</option>' + arr.map(function (v) {
+      return '<option value="' + esc(v) + '"' + (v === cur ? ' selected' : '') + '>' + esc(v) + '</option>';
+    }).join('');
+  }
+  fillFilter($('f-gyosha'), state.masters.gyosha);
+  fillFilter($('f-koumuten'), state.masters.koumuten);
+  fillFilter($('f-tantou'), state.masters.tantou);
 
   var ts = getFiltered();
   var items = aggItem(ts), koumuten = aggKey(ts, 'koumuten'), months = aggMonth(ts);
   var total = ts.reduce(function (s, t) { return s + tallyTotal(t); }, 0);
   var genba = {};
   ts.forEach(function (t) { if (t.genba) genba[t.genba] = 1; });
-  var type = $('chart-type').value;
+  var type = printMode ? 'hbar' : $('chart-type').value;
 
   $('summary').innerHTML = smCard('ink', total, '是正 総件数')
     + smCard('', Object.keys(genba).length, '対象 現場数')
@@ -811,28 +838,33 @@ function renderShukei() {
   $('agg-item').innerHTML = renderChart(items, type);
   $('agg-koumuten').innerHTML = renderChart(koumuten, type);
   $('agg-month').innerHTML = renderChart(months, type);
+  if (showGyosha) $('agg-gyosha').innerHTML = renderChart(aggKey(ts, 'gyosha'), type);
 
   var meta = [];
+  if ($('f-gyosha').value) meta.push('足場業者：' + $('f-gyosha').value);
   if ($('f-koumuten').value) meta.push('工務店：' + $('f-koumuten').value);
   if ($('f-tantou').value) meta.push('生産担当：' + $('f-tantou').value);
   if ($('f-from').value || $('f-to').value) meta.push('期間：' + ($('f-from').value || '') + ' 〜 ' + ($('f-to').value || ''));
   meta.push('総件数 ' + total + ' 件');
   $('print-meta').textContent = meta.join('　／　') + '　（出力：' + todayStr() + '）';
 }
-['f-koumuten','f-tantou','f-from','f-to','chart-type'].forEach(function (id) {
+['f-gyosha','f-koumuten','f-tantou','f-from','f-to','chart-type'].forEach(function (id) {
   $(id).addEventListener('change', renderShukei);
 });
 $('f-clear').addEventListener('click', function () {
-  $('f-koumuten').value = ''; $('f-tantou').value = '';
+  $('f-gyosha').value = ''; $('f-koumuten').value = ''; $('f-tantou').value = '';
   $('f-from').value = ''; $('f-to').value = '';
   renderShukei();
 });
 $('btn-pdf').addEventListener('click', function () {
-  renderShukei();
-  setTimeout(function () { window.print(); }, 60);
+  printMode = true; renderShukei();
+  window.print();
+});
+window.addEventListener('afterprint', function () {
+  if (printMode) { printMode = false; renderShukei(); }
 });
 
-/* ===================== マスタ管理 ===================== */
+/* ===== マスタ管理 ===== */
 function masterRows(kind, arr) {
   if (!arr.length) return '<div class="m-row" style="color:var(--text3);">まだありません</div>';
   return arr.map(function (v, i) {
@@ -844,8 +876,9 @@ function masterRows(kind, arr) {
 }
 function renderMaster() {
   $('m-items').innerHTML = masterRows('items', state.masters.items);
-  $('m-tantou').innerHTML = masterRows('tantou', state.masters.tantou);
+  $('m-gyosha').innerHTML = masterRows('gyosha', state.masters.gyosha);
   $('m-koumuten').innerHTML = masterRows('koumuten', state.masters.koumuten);
+  $('m-tantou').innerHTML = masterRows('tantou', state.masters.tantou);
 }
 $('tab-master').addEventListener('click', function (e) {
   var row = e.target.closest('.m-row');
@@ -876,7 +909,7 @@ document.querySelectorAll('.m-add .input').forEach(function (inp) {
   });
 });
 
-/* ===================== 保存・読込 ===================== */
+/* ===== 保存・読込 ===== */
 $('btn-save').addEventListener('click', function () {
   state.lastExport = nowStamp();
   var blob = new Blob([JSON.stringify(state, null, 2)], { type: 'application/json' });
@@ -887,7 +920,7 @@ $('btn-save').addEventListener('click', function () {
   URL.revokeObjectURL(a.href);
   try { localStorage.setItem(STORE_KEY, JSON.stringify(state)); } catch (e) {}
   dirty = false; updateSaveStatus();
-  toast('書き出しました（seiun-nxに保存してください）');
+  toast('書き出しました。seiun-nx に保存してください');
 });
 $('btn-load').addEventListener('click', function () { $('import-input').click(); });
 $('import-input').addEventListener('change', function () {
@@ -898,10 +931,11 @@ $('import-input').addEventListener('change', function () {
     try {
       var p = JSON.parse(e.target.result);
       if (!p.masters || !p.tallies) throw 0;
+      if (!p.masters.gyosha) p.masters.gyosha = ['足場業者A'];
       state = p;
       try { localStorage.setItem(STORE_KEY, JSON.stringify(state)); } catch (er) {}
       dirty = false; updateSaveStatus();
-      draft = newDraft(); editingId = null;
+      draft = newDraft(); editingId = null; expandedId = null;
       showTab('input');
       toast('読み込みました');
     } catch (err) { toast('読み込めませんでした（形式が違います）'); }
@@ -910,10 +944,12 @@ $('import-input').addEventListener('change', function () {
   this.value = '';
 });
 
-/* ===================== バナー ===================== */
+window.addEventListener('beforeunload', function (e) {
+  if (dirty) { e.preventDefault(); e.returnValue = ''; }
+});
+
 $('banner-x').addEventListener('click', function () { $('intro-banner').style.display = 'none'; });
 
-/* ===================== 初期描画 ===================== */
 updateSaveStatus();
 renderInput();
 </script>
