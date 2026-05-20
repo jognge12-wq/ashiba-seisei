@@ -137,6 +137,15 @@
   .banner b { font-weight: 700; }
   .banner .x { margin-left: auto; cursor: pointer; font-size: 16px; line-height: 1; padding: 0 4px; flex-shrink: 0; }
 
+  .help-card { background: var(--surface); border: 1.5px solid var(--border); border-radius: 12px; padding: 0 14px; margin-bottom: 14px; }
+  .help-card > summary { cursor: pointer; padding: 11px 2px; font-size: 13px; font-weight: 700; color: var(--ink); list-style: none; }
+  .help-card > summary::-webkit-details-marker { display: none; }
+  .help-card > summary::before { content: "▶"; color: var(--text3); font-size: 9px; margin-right: 6px; }
+  .help-card[open] > summary::before { content: "▼"; }
+  .help-list { margin: 2px 0 12px; padding-left: 20px; }
+  .help-list li { font-size: 12px; color: var(--text2); line-height: 1.7; margin-bottom: 3px; }
+  .help-list li b { color: var(--text1); font-weight: 700; }
+
   /* counter */
   .cnt-total { font-size: 13px; font-weight: 700; color: var(--brand); }
   .cnt-row { display: flex; align-items: center; gap: 10px; padding: 8px 6px; border-top: 1px solid var(--border); border-radius: 8px; }
@@ -240,9 +249,9 @@
 
   /* ===== Print: A4 1枚を目標にコンパクト ===== */
   @media print {
-    @page { size: A4; margin: 11mm; }
+    @page { size: A4; margin: 10mm; }
     body { background: #fff; font-size: 11px; }
-    header, .seg-tabs, .no-print, #tab-input, #tab-master { display: none !important; }
+    header, .seg-tabs, .no-print, #tab-input, #tab-master, #intro-banner, #help-card { display: none !important; }
     main { max-width: none; padding: 0; }
     #tab-shukei { display: block !important; }
     .print-only { display: block; }
@@ -260,6 +269,16 @@
     .bar-name { font-size: 9px; width: 128px; }
     .bar-track { height: 11px; border: 1px solid var(--border2); }
     .bar-cnt { font-size: 10px; width: 26px; }
+    .vbar-wrap { padding: 8px 8px 0; }
+    .vbar-plot { height: 108px; }
+    .vbar-cnt { font-size: 9px; }
+    .vbar-name { font-size: 8px; padding: 4px 1px 8px; }
+    .pie-wrap { padding: 7px; gap: 10px; }
+    .pie-svg { width: 116px; height: 116px; }
+    .pie-legend { min-width: 0; gap: 3px; }
+    .lg-row { font-size: 9px; }
+    .agg-table { font-size: 9px; }
+    .agg-table th, .agg-table td { padding: 3px 7px; }
     .print-2col { display: flex; gap: 8px; }
     .print-2col > .card { flex: 1; margin-bottom: 0 !important; }
   }
@@ -281,14 +300,24 @@
 
   <div class="banner" id="intro-banner">
     <div>
-      <b>これは試作（モック）です。</b><br>
-      是正項目・工務店・生産担当・足場業者は <b>仮の名前</b> です（「マスタ管理」タブで実際の名前に書き換え）。
-      使い方：LINEワークスで写真を見ながら是正項目を「＋」→「登録」。
-      <b>【大切】</b>作業が終わったら必ず「データ書き出し」でファイルを保存し、seiun-nx に置いてください
-      （端末内のデータは消えることがあります。保管場所は seiun-nx のファイルです）。
+      <b>これは試作（モック）版です。</b>
+      是正項目・工務店・生産担当・足場業者は仮の名前です（「マスタ管理」タブで実名に書き換え）。
+      本番化のとき、この案内とサンプルデータは外します。
     </div>
     <span class="x" id="banner-x" title="閉じる">×</span>
   </div>
+
+  <details class="help-card" id="help-card" open>
+    <summary>使い方</summary>
+    <ul class="help-list">
+      <li>LINEワークスで是正写真を見ながら、該当する是正項目の「＋」を押す</li>
+      <li>現場名・日付・工務店・生産担当を選んで「登録する」</li>
+      <li>「集計」タブで、是正項目別・工務店別・月別の集計が見られる。PDF出力も可</li>
+      <li>「マスタ管理」タブで、是正項目・工務店・生産担当・足場業者の名前を追加・修正・削除できる</li>
+      <li><b>作業が終わったら必ず「データ書き出し」</b> → ファイルを seiun-nx に保存（端末内のデータは消えることがあります。保管場所は seiun-nx のファイルです）</li>
+      <li>別の端末で続けるときは「データ読み込み」で seiun-nx のファイルを開く</li>
+    </ul>
+  </details>
 
   <div class="seg-tabs">
     <button class="seg-tab active" data-tab="input">是正を入力</button>
@@ -709,8 +738,6 @@ function registerDraft() {
 }
 
 /* ===== 集計 ===== */
-var printMode = false;
-
 function getFiltered() {
   var fg = $('f-gyosha').value, fk = $('f-koumuten').value, ft = $('f-tantou').value;
   var ff = $('f-from').value, fto = $('f-to').value;
@@ -829,7 +856,7 @@ function renderShukei() {
   var total = ts.reduce(function (s, t) { return s + tallyTotal(t); }, 0);
   var genba = {};
   ts.forEach(function (t) { if (t.genba) genba[t.genba] = 1; });
-  var type = printMode ? 'hbar' : $('chart-type').value;
+  var type = $('chart-type').value;
 
   $('summary').innerHTML = smCard('ink', total, '是正 総件数')
     + smCard('', Object.keys(genba).length, '対象 現場数')
@@ -857,11 +884,7 @@ $('f-clear').addEventListener('click', function () {
   renderShukei();
 });
 $('btn-pdf').addEventListener('click', function () {
-  printMode = true; renderShukei();
   window.print();
-});
-window.addEventListener('afterprint', function () {
-  if (printMode) { printMode = false; renderShukei(); }
 });
 
 /* ===== マスタ管理 ===== */
