@@ -252,6 +252,9 @@
   @keyframes tin { from { opacity: 0; transform: translate(-50%, 8px); } to { opacity: 1; transform: translate(-50%, 0); } }
 
   .print-only { display: none; }
+  .print-head { margin-bottom: 14px; padding-bottom: 9px; border-bottom: 2px solid var(--ink); }
+  .print-title { font-size: 19px; font-weight: 700; color: var(--ink); letter-spacing: -0.01em; }
+  .print-sub { font-size: 11px; color: var(--text2); margin-top: 4px; }
   .print-2col > .card:last-child { margin-bottom: 12px; }
   @media (max-width: 560px) {
     .summary { grid-template-columns: repeat(2, 1fr); }
@@ -384,9 +387,9 @@
 
   <!-- ===== 集計 ===== -->
   <section id="tab-shukei" style="display:none;">
-    <div class="print-only print-head">
-      <div class="print-title">足場 是正 事項結果（2026年）</div>
-      <div class="print-sub" id="print-meta"></div>
+    <div class="print-head">
+      <div class="print-title" id="report-title">足場 是正 事項結果（2026年）</div>
+      <div class="print-sub print-only" id="print-meta"></div>
     </div>
     <div class="card no-print">
       <div class="card-head">
@@ -430,7 +433,7 @@
     </div>
     <div class="summary" id="summary"></div>
     <div class="card">
-      <div class="card-head"><div class="card-title" id="cross-title">是正項目 × 月 集計表（2026年）</div></div>
+      <div class="card-head"><div class="card-title">是正項目 × 月 集計表（2026年）</div></div>
       <div class="cross-wrap" id="agg-cross"></div>
     </div>
     <div class="card">
@@ -1026,7 +1029,7 @@ function renderShukei() {
     + smCard('', Object.keys(genba).length, '対象 現場数')
     + smCard('', items.length, '是正項目の種類')
     + smCard('', months.length, '対象 月数');
-  $('cross-title').textContent = (state.branch ? state.branch + '　' : '') + '是正項目 × 月 集計表（' + CROSS_YEAR + '年）';
+  $('report-title').textContent = (state.branch ? state.branch + '　' : '') + '足場 是正 事項結果（' + CROSS_YEAR + '年）';
   $('agg-cross').innerHTML = crossTableHtml(ts);
   $('agg-item').innerHTML = renderChart(items, type);
   $('agg-koumuten').innerHTML = renderChart(koumuten, type);
