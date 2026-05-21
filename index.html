@@ -869,11 +869,16 @@ function aggKey(ts, key) {
   ts.forEach(function (t) { var k = t[key] || '（未設定）'; m[k] = (m[k] || 0) + tallyTotal(t); });
   return sortDesc(m);
 }
-function monthLabel(k) { var p = k.split('-'); return p.length < 2 ? k : p[0] + '年' + (+p[1]) + '月'; }
-function aggMonth(ts) {
-  var m = {};
-  ts.forEach(function (t) { var k = (t.date || '').slice(0, 7) || '（日付なし）'; m[k] = (m[k] || 0) + tallyTotal(t); });
-  return Object.keys(m).sort().map(function (k) { return { name: monthLabel(k), n: m[k] }; });
+function aggCrossMonth(ts) {
+  // 月別はクロス表と同じ区切り（2026年：1〜4月まとめ＋5〜12月）で集計する
+  var cols = crossColumns();
+  var ct = {};
+  ts.forEach(function (t) {
+    var ck = crossColKey(t.date);
+    if (ck) ct[ck] = (ct[ck] || 0) + tallyTotal(t);
+  });
+  return cols.filter(function (c) { return ct[c.key]; })
+    .map(function (c) { return { name: c.label, n: ct[c.key] }; });
 }
 var CROSS_YEAR = 2026;
 function crossColumns() {
@@ -1002,7 +1007,7 @@ function renderShukei() {
   fillFilter($('f-tantou'), state.masters.tantou);
 
   var ts = getFiltered();
-  var items = aggItem(ts), koumuten = aggKey(ts, 'koumuten'), months = aggMonth(ts);
+  var items = aggItem(ts), koumuten = aggKey(ts, 'koumuten'), months = aggCrossMonth(ts);
   var total = ts.reduce(function (s, t) { return s + tallyTotal(t); }, 0);
   var genba = {};
   ts.forEach(function (t) { if (t.genba) genba[t.genba] = 1; });
