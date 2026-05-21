@@ -236,6 +236,7 @@
   .cross-table .cx-tot { font-weight: 700; background: var(--brand-softer); }
   .cross-table tfoot .cx-tot, .cross-table tfoot td { font-weight: 700; background: var(--brand-soft); color: var(--brand-ink); }
   .cross-table .cx-zero { color: var(--border2); }
+  .cross-note { font-size: 11px; color: var(--text2); margin-top: 8px; line-height: 1.6; }
 
   .m-row { display: flex; align-items: center; gap: 8px; padding: 9px 12px; border-top: 1px solid var(--border); }
   .m-row:first-of-type { border-top: none; }
@@ -288,8 +289,10 @@
     .lg-row { font-size: 9px; }
     .agg-table { font-size: 9px; }
     .agg-table th, .agg-table td { padding: 3px 7px; }
-    .cross-table { font-size: 9px; }
-    .cross-table th, .cross-table td { padding: 3px 5px; }
+    .cross-wrap { overflow: visible; }
+    .cross-table { font-size: 11px; }
+    .cross-table th, .cross-table td { padding: 5px 8px; }
+    .cross-note { font-size: 9px; }
     .print-2col { display: flex; gap: 8px; }
     .print-2col > .card { flex: 1; margin-bottom: 0 !important; }
   }
@@ -384,7 +387,7 @@
   <!-- ===== 集計 ===== -->
   <section id="tab-shukei" style="display:none;">
     <div class="print-only print-head">
-      <div class="print-title">足場 是正 集計表</div>
+      <div class="print-title">足場 是正 事項結果（2026年）</div>
       <div class="print-sub" id="print-meta"></div>
     </div>
     <div class="card no-print">
@@ -427,20 +430,20 @@
         </div>
       </div>
     </div>
-    <div class="summary" id="summary"></div>
+    <div class="summary no-print" id="summary"></div>
     <div class="card">
-      <div class="card-head"><div class="card-title">是正項目 × 月 集計表</div></div>
+      <div class="card-head"><div class="card-title">是正項目 × 月 集計表（2026年）</div></div>
       <div class="cross-wrap" id="agg-cross"></div>
     </div>
-    <div class="card">
+    <div class="card no-print">
       <div class="card-head"><div class="card-title">是正項目別 件数</div></div>
       <div id="agg-item"></div>
     </div>
-    <div class="card" id="card-gyosha" style="display:none;">
+    <div class="card no-print" id="card-gyosha" style="display:none;">
       <div class="card-head"><div class="card-title">足場業者別 件数</div></div>
       <div id="agg-gyosha"></div>
     </div>
-    <div class="print-2col">
+    <div class="print-2col no-print">
       <div class="card">
         <div class="card-head"><div class="card-title">工務店別 件数</div></div>
         <div id="agg-koumuten"></div>
@@ -874,42 +877,56 @@ function aggMonth(ts) {
   ts.forEach(function (t) { var k = (t.date || '').slice(0, 7) || '（日付なし）'; m[k] = (m[k] || 0) + tallyTotal(t); });
   return Object.keys(m).sort().map(function (k) { return { name: monthLabel(k), n: m[k] }; });
 }
-function monthShort(k) { var p = k.split('-'); return p.length < 2 ? esc(k) : (+p[1]) + '月'; }
+var CROSS_YEAR = 2026;
+function crossColumns() {
+  var cols = [{ key: 'lump', label: '1〜4月' }];
+  for (var m = 5; m <= 12; m++) {
+    cols.push({ key: CROSS_YEAR + '-' + String(m).padStart(2, '0'), label: m + '月' });
+  }
+  return cols;
+}
+function crossColKey(dateStr) {
+  if (!dateStr || dateStr.slice(0, 4) !== String(CROSS_YEAR)) return null;
+  var m = +dateStr.slice(5, 7);
+  if (m >= 1 && m <= 4) return 'lump';
+  if (m >= 5 && m <= 12) return CROSS_YEAR + '-' + dateStr.slice(5, 7);
+  return null;
+}
 function crossTableHtml(ts) {
-  if (!ts.length) return '<div class="chart-empty">データがありません</div>';
-  var monthsSet = {};
-  ts.forEach(function (t) { var m = (t.date || '').slice(0, 7); if (m) monthsSet[m] = 1; });
-  var months = Object.keys(monthsSet).sort();
+  var cols = crossColumns();
   var items = state.masters.items.slice();
   var grid = {}, colTotal = {}, rowTotal = {}, grand = 0;
   ts.forEach(function (t) {
-    var m = (t.date || '').slice(0, 7);
+    var ck = crossColKey(t.date);
+    if (!ck) return;
     for (var it in t.counts) {
       var n = t.counts[it] || 0;
       if (!n) continue;
       if (items.indexOf(it) < 0) items.push(it);
       grid[it] = grid[it] || {};
-      grid[it][m] = (grid[it][m] || 0) + n;
-      colTotal[m] = (colTotal[m] || 0) + n;
+      grid[it][ck] = (grid[it][ck] || 0) + n;
+      colTotal[ck] = (colTotal[ck] || 0) + n;
       rowTotal[it] = (rowTotal[it] || 0) + n;
       grand += n;
     }
   });
   var head = '<tr><th class="cx-name">是正項目</th>'
-    + months.map(function (m) { return '<th>' + monthShort(m) + '</th>'; }).join('')
+    + cols.map(function (c) { return '<th>' + c.label + '</th>'; }).join('')
     + '<th class="cx-tot">合計</th></tr>';
   var body = items.map(function (it) {
-    var cells = months.map(function (m) {
-      var n = (grid[it] && grid[it][m]) || 0;
+    var cells = cols.map(function (c) {
+      var n = (grid[it] && grid[it][c.key]) || 0;
       return '<td' + (n ? '' : ' class="cx-zero"') + '>' + (n || '') + '</td>';
     }).join('');
     return '<tr><td class="cx-name">' + esc(it) + '</td>' + cells
       + '<td class="cx-tot">' + (rowTotal[it] || '') + '</td></tr>';
   }).join('');
   var foot = '<tr><td class="cx-name">合計</td>'
-    + months.map(function (m) { return '<td>' + (colTotal[m] || '') + '</td>'; }).join('')
+    + cols.map(function (c) { return '<td>' + (colTotal[c.key] || '') + '</td>'; }).join('')
     + '<td>' + grand + '</td></tr>';
-  return '<table class="cross-table"><thead>' + head + '</thead><tbody>' + body + '</tbody><tfoot>' + foot + '</tfoot></table>';
+  return '<table class="cross-table"><thead>' + head + '</thead><tbody>' + body
+    + '</tbody><tfoot>' + foot + '</tfoot></table>'
+    + '<p class="cross-note">※「1〜4月」は経過分（4ヶ月）をまとめた数です（' + CROSS_YEAR + '年 1〜12月）。</p>';
 }
 
 function renderChart(rows, type) {
