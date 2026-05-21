@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>足場 是正 集計（モック）</title>
+<title>足場是正レポート</title>
 <style>
   :root {
     --font: system-ui, -apple-system, "Hiragino Sans", "Hiragino Kaku Gothic ProN", "Yu Gothic", "Meiryo", sans-serif;
@@ -70,12 +70,14 @@
     padding: 9px 16px; display: flex; align-items: center; justify-content: space-between;
     gap: 10px; position: sticky; top: 0; z-index: 100; flex-wrap: wrap;
   }
-  .brand {
-    font-weight: 700; color: var(--ink); font-size: 15px; letter-spacing: -0.01em;
-    padding-left: 10px; border-left: 3px solid var(--brand);
-    display: flex; align-items: baseline; gap: 8px;
+  .brand { display: flex; align-items: center; gap: 9px; }
+  .brand-mark {
+    width: 32px; height: 32px; border-radius: 9px; background: var(--brand);
+    display: flex; align-items: center; justify-content: center; flex-shrink: 0;
+    box-shadow: 0 1px 3px rgba(15,25,20,0.12);
   }
-  .brand small { font-size: 10px; font-weight: 600; color: #fff; background: var(--amber); padding: 2px 7px; border-radius: 100px; }
+  .brand-mark svg { width: 18px; height: 18px; }
+  .brand-name { font-size: 18px; font-weight: 700; color: var(--ink); letter-spacing: -0.02em; }
   .header-right { display: flex; gap: 8px; align-items: center; flex-wrap: wrap; }
   .save-status { font-size: 11px; color: var(--text3); white-space: nowrap; }
   .save-status.dirty { color: var(--amber-ink); font-weight: 600; }
@@ -302,12 +304,17 @@
 <body>
 
 <header>
-  <span class="brand">足場 是正 集計</span>
+  <span class="brand">
+    <span class="brand-mark">
+      <svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round">
+        <line x1="6" y1="3" x2="6" y2="21"/><line x1="12" y1="3" x2="12" y2="21"/><line x1="18" y1="3" x2="18" y2="21"/>
+        <line x1="3" y1="9" x2="21" y2="9"/><line x1="3" y1="15" x2="21" y2="15"/>
+      </svg>
+    </span>
+    <span class="brand-name">足場是正レポート</span>
+  </span>
   <div class="header-right">
     <span class="save-status" id="save-status">読み込み中…</span>
-    <button class="btn btn-secondary btn-sm" id="btn-save">データ書き出し</button>
-    <button class="btn btn-secondary btn-sm" id="btn-load">データ読み込み</button>
-    <input type="file" id="import-input" accept="application/json" hidden>
   </div>
 </header>
 
@@ -1187,36 +1194,6 @@ function saveBranch() {
 $('m-branch-save').addEventListener('click', saveBranch);
 $('m-branch-input').addEventListener('keydown', function (e) {
   if (e.key === 'Enter') { e.preventDefault(); saveBranch(); }
-});
-
-/* ===== 保存・読込 ===== */
-$('btn-save').addEventListener('click', function () {
-  var blob = new Blob([JSON.stringify(state, null, 2)], { type: 'application/json' });
-  var a = document.createElement('a');
-  a.href = URL.createObjectURL(blob);
-  a.download = 'ashiba_seisei_' + todayStr() + '.json';
-  a.click();
-  URL.revokeObjectURL(a.href);
-  toast('バックアップファイルを書き出しました');
-});
-$('btn-load').addEventListener('click', function () { $('import-input').click(); });
-$('import-input').addEventListener('change', function () {
-  var f = this.files && this.files[0];
-  if (!f) return;
-  var rd = new FileReader();
-  rd.onload = function (e) {
-    try {
-      var p = JSON.parse(e.target.result);
-      if (!p || !p.masters || !Array.isArray(p.tallies)) throw 0;
-      state = normalizeState(p);
-      draft = newDraft(); editingId = null; expandedId = null;
-      saveState();
-      showTab('input');
-      toast('読み込みました（同期します）');
-    } catch (err) { toast('読み込めませんでした（形式が違います）'); }
-  };
-  rd.readAsText(f);
-  this.value = '';
 });
 
 window.addEventListener('beforeunload', function (e) {
