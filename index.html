@@ -227,6 +227,16 @@
   .agg-table tfoot td { font-weight: 700; border-top: 1.5px solid var(--border2); }
   .chart-empty { padding: 26px 14px; color: var(--text3); font-size: 13px; text-align: center; }
 
+  /* 是正項目 × 月 クロス集計表 */
+  .cross-wrap { overflow-x: auto; -webkit-overflow-scrolling: touch; }
+  .cross-table { border-collapse: collapse; font-size: 12px; min-width: 100%; }
+  .cross-table th, .cross-table td { border: 1px solid var(--border); padding: 6px 8px; text-align: center; white-space: nowrap; }
+  .cross-table thead th { background: var(--surface2); font-size: 11px; color: var(--text2); font-weight: 700; }
+  .cross-table .cx-name { text-align: left; }
+  .cross-table .cx-tot { font-weight: 700; background: var(--brand-softer); }
+  .cross-table tfoot .cx-tot, .cross-table tfoot td { font-weight: 700; background: var(--brand-soft); color: var(--brand-ink); }
+  .cross-table .cx-zero { color: var(--border2); }
+
   .m-row { display: flex; align-items: center; gap: 8px; padding: 9px 12px; border-top: 1px solid var(--border); }
   .m-row:first-of-type { border-top: none; }
   .m-name { flex: 1; font-size: 13px; }
@@ -278,6 +288,8 @@
     .lg-row { font-size: 9px; }
     .agg-table { font-size: 9px; }
     .agg-table th, .agg-table td { padding: 3px 7px; }
+    .cross-table { font-size: 9px; }
+    .cross-table th, .cross-table td { padding: 3px 5px; }
     .print-2col { display: flex; gap: 8px; }
     .print-2col > .card { flex: 1; margin-bottom: 0 !important; }
   }
@@ -300,7 +312,7 @@
   <div class="banner" id="intro-banner">
     <div>
       <b>これは試作（モック）版です。</b>
-      是正項目・工務店・生産担当・足場業者は仮の名前です（「マスタ管理」タブで実名に書き換え）。
+      是正項目は実際のリストが入っています。工務店・生産担当・足場業者は仮の名前です（「マスタ管理」タブで実名に書き換え）。
       本番化のとき、この案内とサンプルデータは外します。
     </div>
     <span class="x" id="banner-x" title="閉じる">×</span>
@@ -417,6 +429,10 @@
     </div>
     <div class="summary" id="summary"></div>
     <div class="card">
+      <div class="card-head"><div class="card-title">是正項目 × 月 集計表</div></div>
+      <div class="cross-wrap" id="agg-cross"></div>
+    </div>
+    <div class="card">
       <div class="card-head"><div class="card-title">是正項目別 件数</div></div>
       <div id="agg-item"></div>
     </div>
@@ -439,8 +455,8 @@
   <!-- ===== マスタ管理 ===== -->
   <section id="tab-master" style="display:none;">
     <div class="card">
-      <div class="card-head"><div class="card-title">是正項目（仮）</div></div>
-      <p class="hint">本物のリストに合わせて、ここを書き換えてください。並び順は追加した順です。</p>
+      <div class="card-head"><div class="card-title">是正項目</div></div>
+      <p class="hint">同僚さん作成のリスト（7項目）を入れてあります。必要なら追加・修正・削除できます。</p>
       <div id="m-items"></div>
       <div class="m-add">
         <input type="text" class="input" id="m-items-input" placeholder="是正項目を追加">
@@ -479,7 +495,7 @@
 <script>
 "use strict";
 
-var STORE_KEY = 'ashiba_seisei_mock_v6';
+var STORE_KEY = 'ashiba_seisei_mock_v7';
 var PALETTE = [
   'oklch(0.55 0.14 155)', 'oklch(0.72 0.13 75)',  'oklch(0.60 0.13 240)',
   'oklch(0.62 0.17 28)',  'oklch(0.58 0.13 310)', 'oklch(0.70 0.12 195)',
@@ -492,11 +508,8 @@ function defaultState() {
     schema: 6,
     masters: {
       items: [
-        '壁つなぎ不足・未設置', '手すり・中さん不備', '幅木（つま先板）未設置',
-        '筋かい・ブレース不足', '足場板の隙間・固定不良', '昇降設備（階段・はしご）不備',
-        'ジャッキベース・敷板不良', '単管・クランプ緊結不良', '建地の傾き・建入れ不良',
-        '朝顔（落下防護棚）未設置', 'メッシュシート未設置・破れ', '開口部・すき間の養生不足',
-        '設置間隔・スパン不良', 'その他'
+        '筋交い・ブラケット不足', '脚部ベースの固定', '昇降階段廻り＊遮断器含む',
+        '作業床インシュロック', '躯体間離れ', 'その他簡易項目＊看板など', 'イレギュラー'
       ],
       gyosha: ['足場業者A'],
       koumuten: ['A工務店', 'B工務店', 'C工務店'],
@@ -509,12 +522,12 @@ function defaultState() {
 
 function seedTallies() {
   var s = [
-    ['2026-03-11','松本邸','A工務店','担当A','',{'壁つなぎ不足・未設置':2,'手すり・中さん不備':1}],
-    ['2026-04-08','鈴木邸','B工務店','担当B','',{'幅木（つま先板）未設置':1,'壁つなぎ不足・未設置':1}],
-    ['2026-04-22','高橋邸 新築','C工務店','担当C','北側足場',{'筋かい・ブレース不足':1,'足場板の隙間・固定不良':2}],
-    ['2026-05-07','松本邸','A工務店','担当A','',{'開口部・すき間の養生不足':1}],
-    ['2026-05-12','鈴木邸','B工務店','担当B','',{'壁つなぎ不足・未設置':1,'手すり・中さん不備':1}],
-    ['2026-05-16','大野邸','A工務店','担当D','',{'メッシュシート未設置・破れ':1,'昇降設備（階段・はしご）不備':1}]
+    ['2026-04-08','鈴木邸','B工務店','担当B','',{'脚部ベースの固定':2,'筋交い・ブラケット不足':1}],
+    ['2026-04-15','高橋邸 新築','C工務店','担当C','北側足場',{'脚部ベースの固定':1,'昇降階段廻り＊遮断器含む':2}],
+    ['2026-04-22','松本邸','A工務店','担当A','',{'作業床インシュロック':1,'躯体間離れ':1}],
+    ['2026-05-07','鈴木邸','B工務店','担当B','',{'脚部ベースの固定':1,'その他簡易項目＊看板など':1}],
+    ['2026-05-13','大野邸','A工務店','担当D','',{'筋交い・ブラケット不足':1}],
+    ['2026-05-19','高橋邸 新築','C工務店','担当C','',{'昇降階段廻り＊遮断器含む':1,'脚部ベースの固定':1}]
   ];
   return s.map(function (r, i) {
     return { id: 'seed' + i, date: r[0], genba: r[1], koumuten: r[2], tantou: r[3],
@@ -861,6 +874,43 @@ function aggMonth(ts) {
   ts.forEach(function (t) { var k = (t.date || '').slice(0, 7) || '（日付なし）'; m[k] = (m[k] || 0) + tallyTotal(t); });
   return Object.keys(m).sort().map(function (k) { return { name: monthLabel(k), n: m[k] }; });
 }
+function monthShort(k) { var p = k.split('-'); return p.length < 2 ? esc(k) : (+p[1]) + '月'; }
+function crossTableHtml(ts) {
+  if (!ts.length) return '<div class="chart-empty">データがありません</div>';
+  var monthsSet = {};
+  ts.forEach(function (t) { var m = (t.date || '').slice(0, 7); if (m) monthsSet[m] = 1; });
+  var months = Object.keys(monthsSet).sort();
+  var items = state.masters.items.slice();
+  var grid = {}, colTotal = {}, rowTotal = {}, grand = 0;
+  ts.forEach(function (t) {
+    var m = (t.date || '').slice(0, 7);
+    for (var it in t.counts) {
+      var n = t.counts[it] || 0;
+      if (!n) continue;
+      if (items.indexOf(it) < 0) items.push(it);
+      grid[it] = grid[it] || {};
+      grid[it][m] = (grid[it][m] || 0) + n;
+      colTotal[m] = (colTotal[m] || 0) + n;
+      rowTotal[it] = (rowTotal[it] || 0) + n;
+      grand += n;
+    }
+  });
+  var head = '<tr><th class="cx-name">是正項目</th>'
+    + months.map(function (m) { return '<th>' + monthShort(m) + '</th>'; }).join('')
+    + '<th class="cx-tot">合計</th></tr>';
+  var body = items.map(function (it) {
+    var cells = months.map(function (m) {
+      var n = (grid[it] && grid[it][m]) || 0;
+      return '<td' + (n ? '' : ' class="cx-zero"') + '>' + (n || '') + '</td>';
+    }).join('');
+    return '<tr><td class="cx-name">' + esc(it) + '</td>' + cells
+      + '<td class="cx-tot">' + (rowTotal[it] || '') + '</td></tr>';
+  }).join('');
+  var foot = '<tr><td class="cx-name">合計</td>'
+    + months.map(function (m) { return '<td>' + (colTotal[m] || '') + '</td>'; }).join('')
+    + '<td>' + grand + '</td></tr>';
+  return '<table class="cross-table"><thead>' + head + '</thead><tbody>' + body + '</tbody><tfoot>' + foot + '</tfoot></table>';
+}
 
 function renderChart(rows, type) {
   if (!rows.length) return '<div class="chart-empty">データがありません</div>';
@@ -947,6 +997,7 @@ function renderShukei() {
     + smCard('', Object.keys(genba).length, '対象 現場数')
     + smCard('', items.length, '是正項目の種類')
     + smCard('', months.length, '対象 月数');
+  $('agg-cross').innerHTML = crossTableHtml(ts);
   $('agg-item').innerHTML = renderChart(items, type);
   $('agg-koumuten').innerHTML = renderChart(koumuten, type);
   $('agg-month').innerHTML = renderChart(months, type);
