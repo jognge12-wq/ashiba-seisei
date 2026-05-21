@@ -302,9 +302,9 @@
 <body>
 
 <header>
-  <span class="brand">足場 是正 集計 <small>モック</small></span>
+  <span class="brand">足場 是正 集計</span>
   <div class="header-right">
-    <span class="save-status" id="save-status">未保存</span>
+    <span class="save-status" id="save-status">読み込み中…</span>
     <button class="btn btn-secondary btn-sm" id="btn-save">データ書き出し</button>
     <button class="btn btn-secondary btn-sm" id="btn-load">データ読み込み</button>
     <input type="file" id="import-input" accept="application/json" hidden>
@@ -315,9 +315,9 @@
 
   <div class="banner" id="intro-banner">
     <div>
-      <b>これは試作（モック）版です。</b>
-      是正項目は実際のリストが入っています。工務店・生産担当・足場業者は仮の名前です（「マスタ管理」タブで実名に書き換え）。
-      本番化のとき、この案内とサンプルデータは外します。
+      <b>セットアップ中：</b>
+      工務店・生産担当・足場業者は仮の名前です。「マスタ管理」タブで実際の名前に書き換えてください
+      （是正項目は本物のリストが入っています）。書き換え後、この案内は×で閉じてOKです。
     </div>
     <span class="x" id="banner-x" title="閉じる">×</span>
   </div>
@@ -330,8 +330,8 @@
       <li>過去の登録は「登録一覧」タブで確認・検索・編集できる</li>
       <li>「集計」タブで、是正項目別・工務店別・月別の集計が見られる。PDF出力も可</li>
       <li>「マスタ管理」タブで、是正項目・工務店・生産担当・足場業者の名前を追加・修正・削除できる</li>
-      <li><b>作業が終わったら必ず「データ書き出し」</b> → ファイルを seiun-nx に保存（端末内のデータは消えることがあります。保管場所は seiun-nx のファイルです）</li>
-      <li>別の端末で続けるときは「データ読み込み」で seiun-nx のファイルを開く</li>
+      <li>入力した内容は<b>自動で保存・同期</b>されます。書き出し／読み込みの手作業は不要です</li>
+      <li>右上に同期の状態（同期済み／同期中／オフライン）が表示されます</li>
     </ul>
   </details>
 
@@ -507,7 +507,8 @@
 <script>
 "use strict";
 
-var STORE_KEY = 'ashiba_seisei_mock_v7';
+var STORE_KEY = 'ashiba_seisei_v8';
+var GAS_URL = 'https://script.google.com/macros/s/AKfycbxPA87yrpMmZXvPid_xHmdWpT6iTPhNT5Y0OQwzMm8mhcd_aCI1ooFvthHh1lfTIsWy/exec';
 var PALETTE = [
   'oklch(0.55 0.14 155)', 'oklch(0.72 0.13 75)',  'oklch(0.60 0.13 240)',
   'oklch(0.62 0.17 28)',  'oklch(0.58 0.13 310)', 'oklch(0.70 0.12 195)',
@@ -533,45 +534,119 @@ function defaultState() {
   };
 }
 
-function seedTallies() {
-  var s = [
-    ['2026-04-08','鈴木邸','B工務店','担当B','',{'脚部ベースの固定':2,'筋交い・ブラケット不足':1}],
-    ['2026-04-15','高橋邸 新築','C工務店','担当C','北側足場',{'脚部ベースの固定':1,'昇降階段廻り＊遮断器含む':2}],
-    ['2026-04-22','松本邸','A工務店','担当A','',{'作業床インシュロック':1,'躯体間離れ':1}],
-    ['2026-05-07','鈴木邸','B工務店','担当B','',{'脚部ベースの固定':1,'その他簡易項目＊看板など':1}],
-    ['2026-05-13','大野邸','A工務店','担当D','',{'筋交い・ブラケット不足':1}],
-    ['2026-05-19','高橋邸 新築','C工務店','担当C','',{'昇降階段廻り＊遮断器含む':1,'脚部ベースの固定':1}]
-  ];
-  return s.map(function (r, i) {
-    return { id: 'seed' + i, date: r[0], genba: r[1], koumuten: r[2], tantou: r[3],
-             gyosha: '足場業者A', memo: r[4], counts: r[5], updatedAt: '' };
-  });
-}
+/* ===== データ層（localStorageキャッシュ ＋ GAS自動同期） ===== */
+var PENDING_KEY = STORE_KEY + '_pending';
+var state = loadLocal();
+var hasUnsynced = false;
+var pushTimer = null;
 
-var state = loadState();
-var dirty = false;
-
-function loadState() {
+function loadLocal() {
   try {
     var raw = localStorage.getItem(STORE_KEY);
     if (raw) {
       var p = JSON.parse(raw);
-      if (p && p.masters && p.tallies) { if (!p.branch) p.branch = '岐阜支店'; return p; }
+      if (p && p.masters && Array.isArray(p.tallies)) return normalizeState(p);
     }
   } catch (e) {}
-  var st = defaultState();
-  st.tallies = seedTallies();
-  return st;
+  return defaultState();
 }
-function saveState() {
+function saveLocal() {
   try { localStorage.setItem(STORE_KEY, JSON.stringify(state)); } catch (e) {}
-  dirty = true;
-  updateSaveStatus();
 }
-function updateSaveStatus() {
+function normalizeState(p) {
+  if (!p.masters || typeof p.masters !== 'object') p.masters = defaultState().masters;
+  ['items', 'gyosha', 'koumuten', 'tantou'].forEach(function (k) {
+    if (!Array.isArray(p.masters[k])) p.masters[k] = [];
+  });
+  if (!Array.isArray(p.tallies)) p.tallies = [];
+  p.tallies.forEach(function (t) {
+    if (t && (!t.counts || typeof t.counts !== 'object')) t.counts = {};
+  });
+  if (!p.branch) p.branch = '岐阜支店';
+  if (p.lastExport === undefined) p.lastExport = null;
+  return p;
+}
+
+/* 変更時：localStorageへ即保存 ＋ GASへ遅延プッシュ */
+function saveState() {
+  saveLocal();
+  hasUnsynced = true;
+  try { localStorage.setItem(PENDING_KEY, '1'); } catch (e) {}
+  updateSyncStatus('pending');
+  clearTimeout(pushTimer);
+  pushTimer = setTimeout(syncPush, 1500);
+}
+
+function updateSyncStatus(kind) {
   var el = $('save-status');
-  if (dirty) { el.textContent = '● 未保存の変更あり'; el.classList.add('dirty'); }
-  else { el.textContent = state.lastExport ? ('保存済 ' + state.lastExport) : '未保存'; el.classList.remove('dirty'); }
+  if (!el) return;
+  var map = {
+    loading: ['読み込み中…', false],
+    pending: ['● 未同期', true],
+    saving:  ['同期中…', false],
+    synced:  ['同期済み', false],
+    offline: ['オフライン（後で同期）', true],
+    error:   ['同期エラー', true]
+  };
+  var v = map[kind] || map.synced;
+  el.textContent = v[0];
+  el.classList.toggle('dirty', v[1]);
+}
+
+function syncPush() {
+  clearTimeout(pushTimer);
+  updateSyncStatus('saving');
+  fetch(GAS_URL, {
+    method: 'POST',
+    headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+    body: JSON.stringify(state)
+  }).then(function (r) { return r.json(); })
+    .then(function (res) {
+      if (res && res.ok) {
+        hasUnsynced = false;
+        try { localStorage.removeItem(PENDING_KEY); } catch (e) {}
+        updateSyncStatus('synced');
+      } else {
+        updateSyncStatus('error');
+      }
+    })
+    .catch(function () { updateSyncStatus('offline'); });
+}
+
+function rerenderActive() {
+  var t = document.querySelector('.seg-tab.active');
+  showTab(t ? t.dataset.tab : 'input');
+}
+
+function syncPull() {
+  updateSyncStatus('loading');
+  fetch(GAS_URL, { method: 'GET' })
+    .then(function (r) { return r.json(); })
+    .then(function (remote) {
+      if (hasUnsynced) { syncPush(); return; }
+      if (remote && remote.exists) {
+        state = normalizeState({
+          schema: remote.schema, branch: remote.branch, masters: remote.masters,
+          tallies: remote.tallies, lastExport: remote.lastExport
+        });
+        saveLocal();
+        try { localStorage.removeItem(PENDING_KEY); } catch (e) {}
+        rerenderActive();
+        updateSyncStatus('synced');
+      } else {
+        syncPush();
+      }
+    })
+    .catch(function () { updateSyncStatus('offline'); });
+}
+
+function startSync() {
+  if (localStorage.getItem(PENDING_KEY)) {
+    hasUnsynced = true;
+    syncPush();
+  } else {
+    syncPull();
+  }
 }
 
 function $(id) { return document.getElementById(id); }
@@ -1116,16 +1191,13 @@ $('m-branch-input').addEventListener('keydown', function (e) {
 
 /* ===== 保存・読込 ===== */
 $('btn-save').addEventListener('click', function () {
-  state.lastExport = nowStamp();
   var blob = new Blob([JSON.stringify(state, null, 2)], { type: 'application/json' });
   var a = document.createElement('a');
   a.href = URL.createObjectURL(blob);
   a.download = 'ashiba_seisei_' + todayStr() + '.json';
   a.click();
   URL.revokeObjectURL(a.href);
-  try { localStorage.setItem(STORE_KEY, JSON.stringify(state)); } catch (e) {}
-  dirty = false; updateSaveStatus();
-  toast('書き出しました。seiun-nx に保存してください');
+  toast('バックアップファイルを書き出しました');
 });
 $('btn-load').addEventListener('click', function () { $('import-input').click(); });
 $('import-input').addEventListener('change', function () {
@@ -1136,19 +1208,11 @@ $('import-input').addEventListener('change', function () {
     try {
       var p = JSON.parse(e.target.result);
       if (!p || !p.masters || !Array.isArray(p.tallies)) throw 0;
-      ['items', 'gyosha', 'koumuten', 'tantou'].forEach(function (k) {
-        if (!Array.isArray(p.masters[k])) p.masters[k] = [];
-      });
-      p.tallies.forEach(function (t) {
-        if (!t.counts || typeof t.counts !== 'object') t.counts = {};
-      });
-      if (!p.branch) p.branch = '岐阜支店';
-      state = p;
-      try { localStorage.setItem(STORE_KEY, JSON.stringify(state)); } catch (er) {}
-      dirty = false; updateSaveStatus();
+      state = normalizeState(p);
       draft = newDraft(); editingId = null; expandedId = null;
+      saveState();
       showTab('input');
-      toast('読み込みました');
+      toast('読み込みました（同期します）');
     } catch (err) { toast('読み込めませんでした（形式が違います）'); }
   };
   rd.readAsText(f);
@@ -1156,13 +1220,13 @@ $('import-input').addEventListener('change', function () {
 });
 
 window.addEventListener('beforeunload', function (e) {
-  if (dirty) { e.preventDefault(); e.returnValue = ''; }
+  if (hasUnsynced) { e.preventDefault(); e.returnValue = ''; }
 });
 
 $('banner-x').addEventListener('click', function () { $('intro-banner').style.display = 'none'; });
 
-updateSaveStatus();
 renderInput();
+startSync();
 </script>
 </body>
 </html>
